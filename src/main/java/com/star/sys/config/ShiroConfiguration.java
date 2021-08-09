@@ -87,7 +87,7 @@ public class ShiroConfiguration {
         //退出
         filterChainDefinitionsMap.put("/logout","logout");
         //拦截请求
-        filterChainDefinitionsMap.put("/**","authc");
+        // filterChainDefinitionsMap.put("/**","authc");
         //将过滤器链设置到shiroFilterFactoryBean对象中
         factoryBean.setFilterChainDefinitionMap(filterChainDefinitionsMap);
         //身份验证失败要去到登录页面

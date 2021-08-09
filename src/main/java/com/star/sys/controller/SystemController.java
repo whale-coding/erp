@@ -17,4 +17,13 @@ public class SystemController {
     public String toIndex(){
         return "system/home/index";
     }
+
+    /**
+     * 跳转到桌面工作台
+     * @return
+     */
+    @RequestMapping("/desktop")
+    public String desktop() {
+        return "system/home/desktopManager";
+    }
 }
