@@ -43,12 +43,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public JSONResult login(String loginname, String pwd, HttpSession session, HttpServletRequest request){
+    public JSONResult login(String loginname, String loginpwd, HttpSession session, HttpServletRequest request){
 
             //获取当前登录主体对象
             Subject subject = SecurityUtils.getSubject();
             //创建令牌对象
-            UsernamePasswordToken token = new UsernamePasswordToken(loginname,pwd);
+            UsernamePasswordToken token = new UsernamePasswordToken(loginname,loginpwd);
             try {
             //登录
             subject.login(token);
