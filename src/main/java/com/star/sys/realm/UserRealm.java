@@ -22,7 +22,6 @@ public class UserRealm extends AuthorizingRealm {
     @Resource
     private UserService userService;
 
-
     /**
      * 授权
      * @param principalCollection
