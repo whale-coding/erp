@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -86,6 +87,26 @@ public class NoticeController {
         }
         //失败
         return SystemConstant.ADD_ERROR;
+    }
+
+
+    /**
+     * 批量删除公告
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/batchDelete")
+    public JSONResult batchDelete(String ids){
+        //将字符串拆分成数组
+        String[] idsStr=ids.split(",");
+        //判断是否删除成功
+        if (noticeService.removeByIds(Arrays.asList(idsStr))){  //将字符数组转换为List集合作为参数
+            //删除成功
+            return SystemConstant.DELETE_SUCCESS;
+        }else {
+            //删除失败
+            return SystemConstant.DELETE_ERROR;
+        }
     }
 
 }

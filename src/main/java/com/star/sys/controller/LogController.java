@@ -65,6 +65,12 @@ public class LogController {
         return new DataGridViewResult(logIPage.getTotal(),logIPage.getRecords());
     }
 
+
+    /**
+     * 批量删除日志
+     * @param ids
+     * @return
+     */
     @RequestMapping("/batchDelete")
     public JSONResult batchDelete(String ids){
         //将字符串拆分成数组

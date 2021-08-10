@@ -193,7 +193,7 @@
           break;
               //批量删除
         case 'batchDelete':
-
+          batchDelete();
           break;
       }
     });
@@ -242,6 +242,47 @@
       },"json");
       return false;
     });
+
+
+    /**
+     * 批量删除
+     */
+    function batchDelete() {
+      //获取选中行
+      var checkStatus = table.checkStatus('noticeTable'); //noticeTable 即为lay-filter的属性值
+      //获取选中的数量
+      var length = checkStatus.data.length;
+      //判断长度是否大于0
+      if(length>0){
+        //提示是否删除
+        layer.confirm("确定要删除这"+length+"条数据吗?", {icon: 3, title:'提示'}, function(index){
+          var checkData = checkStatus.data;//获取每一行的数据
+          //声明数组，保存选中行的id
+          var idArr = [];
+          for(var i=0;i<length;i++){
+            //获取选中行的id
+            idArr.push(checkData[i].id);
+          }
+          //id数组
+          var ids = idArr.join(",");
+          //发送删除的请求
+          $.post("/sys/notice/batchDelete",{"ids":ids},function (result) {
+            //判断是否成功
+            if(result.success){
+              //删除成功后刷新数据表格
+              tableIns.reload();
+            }
+            layer.msg(result.message);//弹出提示信息
+          },"json");
+
+          //关闭提示框
+          layer.close(index);
+        });
+      }else{
+        //没有选中行，提示请选择要删除的行！
+        layer.msg("请选择要删除的行！",{icon: 0});
+      }
+    }
 
 
   });
