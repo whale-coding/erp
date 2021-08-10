@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.sys.pojo.Log;
 import com.star.sys.service.LogService;
 import com.star.sys.utils.DataGridViewResult;
+import com.star.sys.utils.JSONResult;
+import com.star.sys.utils.SystemConstant;
 import com.star.sys.vo.LogVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * <p>
@@ -30,6 +33,11 @@ public class LogController {
     @Resource
     private LogService logService;
 
+    /**
+     * 查询日志列表
+     * @param logVo
+     * @return
+     */
     @RequestMapping("/loglist")
     public DataGridViewResult  loglist(LogVo logVo){
         //创建分页信息对象，参数1：当前页码  参数2：每页显示条数
@@ -56,6 +64,21 @@ public class LogController {
         //返回数据(返回总记录数和数据)
         return new DataGridViewResult(logIPage.getTotal(),logIPage.getRecords());
     }
+
+    @RequestMapping("/batchDelete")
+    public JSONResult batchDelete(String ids){
+        //将字符串拆分成数组
+        String[] idsStr=ids.split(",");
+        //判断是否删除成功
+        if (logService.removeByIds(Arrays.asList(idsStr))){  //将字符数组转换为List集合作为参数
+            //删除成功
+            return SystemConstant.DELETE_SUCCESS;
+        }else {
+            //删除失败
+            return SystemConstant.DELETE_ERROR;
+        }
+    }
+
 
 }
 

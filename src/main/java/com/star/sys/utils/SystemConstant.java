@@ -77,8 +77,34 @@ public interface SystemConstant {
      */
     String DELETE_ACTION="删除操作";
 
-//==========================================================================================================
+//================================跟增加、删除、修改有关的常量===============================================================
+
+    /**
+     * 删除成功
+     */
+    JSONResult DELETE_SUCCESS = new JSONResult(true,"删除成功");
+    /**
+     * 删除失败
+     */
+    JSONResult DELETE_ERROR = new JSONResult(false,"删除失败");
+    /**
+     * 添加成功
+     */
+    JSONResult ADD_SUCCESS = new JSONResult(true,"添加成功");
+    /**
+     * 添加失败
+     */
+    JSONResult ADD_ERROR = new JSONResult(false,"添加失败");
+    /**
+     * 修改成功
+     */
+    JSONResult UPDATE_SUCCESS = new JSONResult(true,"修改成功");
+    /**
+     * 修改失败
+     */
+    JSONResult UPDATE_ERROR = new JSONResult(false,"修改失败");
 
 
+//===================================================================================================
 
 }
