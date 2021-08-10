@@ -83,7 +83,9 @@
     <div class="layui-form-item layui-row layui-col-xs12">
       <label class="layui-form-label">公告标题</label>
       <div class="layui-input-block">
+        <!--修改时有效-->
         <input type="hidden" name="id">
+
         <input type="text" class="layui-input" name="title"  lay-verify="required" placeholder="请输入标题">
       </div>
     </div>
@@ -95,7 +97,7 @@
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
       <div class="layui-input-block" style="text-align: center;">
-        <button type="button" class="layui-btn" lay-submit="" lay-filter="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
+        <button type="button" class="layui-btn" lay-submit lay-filter="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
         <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
       </div>
     </div>
@@ -182,6 +184,64 @@
       return false;//关闭跳转页面
     });
 
+    //监听头部工具栏
+    table.on("toolbar(noticeTable)",function (obj) {
+      switch (obj.event) {
+              //添加公告
+        case 'add':
+          openAddNoticeWindow();
+          break;
+              //批量删除
+        case 'batchDelete':
+
+          break;
+      }
+    });
+
+    var mainIndex;//弹出层的索引下标
+    var editIndex;//富文本编辑器索引
+    var url;//提交路径
+
+    /**
+     * 打开添加公告窗口
+     */
+    function openAddNoticeWindow() {
+      mainIndex = layer.open({
+        type:1,
+        title:"发布公告",
+        area:["800px","500px"],
+        content:$("#addOrUpdateDiv"),//引用的内容窗口
+        success:function () {
+          //清空表单数据
+          $("#dataFrm")[0].reset();
+          //清空富文本编辑器
+          layedit.setContent(editIndex,"");
+          //添加的提交请求
+          url = "/sys/notice/addNotice";
+        }
+      });
+      //初始化富文本编辑器
+      editIndex = layedit.build("content");
+    }
+
+    //监听添加和修改公告表单的提交事件
+    form.on("submit(doSubmit)",function (data) {
+      //将富文本编辑器的内容同步到textarea文本域中
+      layedit.sync(editIndex);
+
+      $.post(url,$("#dataFrm").serialize(),function (result) {
+        //判断是否成功
+        if(result.success){
+          //刷新数据表格
+          tableIns.reload();
+        }
+        //显示提示信息
+        layer.msg(result.message);
+        //窗口关闭
+        layer.close(mainIndex);
+      },"json");
+      return false;
+    });
 
 
   });
