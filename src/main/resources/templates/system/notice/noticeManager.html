@@ -285,6 +285,49 @@
     }
 
 
+    //监听行工具栏
+    table.on("tool(noticeTable)",function (obj) {
+      //获取当前选中行的数据
+      var data = obj.data;
+      //监听事件
+      switch (obj.event) {
+
+        case 'update':  //修改
+          openUpdateNoticeWindow(data);
+          break;
+        case 'delete':  //删除
+          deleteNotice(data);
+          break;
+        case 'show':   //查看
+          showNotice(data);
+          break;
+      }
+    });
+
+    /**
+     * 修改公告
+     * @param data  当前行的数据
+     */
+    function openUpdateNoticeWindow(data) {
+      mainIndex = layer.open({
+        type:1,
+        title:"修改公告",
+        area:["800px","500px"],
+        content:$("#addOrUpdateDiv"),//引用的内容窗口
+        success:function () {
+          //数据回显
+          form.val("dataFrm",data);//参数1：dataFrm是form表单的lay-filter的属性值
+          //富文本回显
+          layedit.setContent(editIndex,data.content);
+          //添加的提交请求
+          url = "/sys/notice/updateNotice";
+        }
+      });
+      //初始化富文本编辑器
+      editIndex = layedit.build("content");
+    }
+
+
   });
 </script>
 </body>

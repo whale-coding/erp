@@ -109,5 +109,25 @@ public class NoticeController {
         }
     }
 
+    /**
+     * 修改公告
+     * @param notice
+     * @return
+     */
+    @RequestMapping("/updateNotice")
+    public JSONResult updateNotice(Notice notice){
+        notice.setModifytime(new Date());  //修改时间为当前时间
+        //修改公告
+        if(noticeService.updateById(notice)){
+            //修改成功
+            return SystemConstant.UPDATE_SUCCESS;
+        }
+        //修改失败
+        return SystemConstant.UPDATE_ERROR;
+    }
+
+
+
+
 }
 
