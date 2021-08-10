@@ -36,4 +36,13 @@ public class SystemController {
         return "system/log/logManager";
     }
 
+    /**
+     * 跳转到公告管理页面
+     * @return
+     */
+    @RequestMapping("/toNoticeManager")
+    public String toNoticeManager() {
+        return "system/notice/noticeManager";
+    }
+
 }
