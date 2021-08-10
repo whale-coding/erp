@@ -54,7 +54,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-input-block" style="text-align: center;">
-                    <button type="button" class="layui-btn"><span class="layui-icon layui-icon-search"></span>查询</button>
+                    <button type="button" class="layui-btn" lay-submit lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
                     <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
                 </div>
             </div>
@@ -115,6 +115,21 @@
             ]
             ]
 
+        });
+
+
+        //绑定模糊查询监听事件
+        //其中：submit()是layui中form表单的提交事件
+        //doSearch是lay-filter的属性值
+        form.on("submit(doSearch)",function (data) {
+            //表格数据重载
+            tableIns.reload({
+                where:data.field,  //where:设定异步数据接口的额外参数 //data.field:当前容器的全部表单字段，名值对形式：{name: value}
+                page:{
+                    curr:1//当前页码
+                }
+            });
+            return false;//阻止表单跳转
         });
 
     });
