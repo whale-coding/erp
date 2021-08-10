@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import org.springframework.http.HttpRequest;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -78,4 +77,17 @@ public class Log implements Serializable {
     }
 
 
+    public Log() {
+
+    }
+
+    public Log(Integer id, String content, String type, String loginname, Integer userid, String loginip, Date createtime) {
+        this.id = id;
+        this.content = content;
+        this.type = type;
+        this.loginname = loginname;
+        this.userid = userid;
+        this.loginip = loginip;
+        this.createtime = createtime;
+    }
 }

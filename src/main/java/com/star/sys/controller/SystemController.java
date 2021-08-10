@@ -26,4 +26,14 @@ public class SystemController {
     public String desktop() {
         return "system/home/desktopManager";
     }
+
+    /**
+     * 跳转到日志管理页面
+     * @return
+     */
+    @RequestMapping("/toLogManager")
+    public String toLogManager() {
+        return "system/log/logManager";
+    }
+
 }

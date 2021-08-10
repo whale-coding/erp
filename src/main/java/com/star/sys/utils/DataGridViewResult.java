@@ -44,6 +44,11 @@ public class DataGridViewResult {
         this.data = data;
     }
 
+    /**
+     * 创建数据表格对象
+     * @param count    数据总数量
+     * @param data     数据集合列表
+     */
     public DataGridViewResult(Long count, Object data) {
         super();
         this.count = count;
