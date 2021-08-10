@@ -126,7 +126,21 @@ public class NoticeController {
         return SystemConstant.UPDATE_ERROR;
     }
 
+    /**
+     * 删除公告
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteById")
+    public JSONResult deleteById(int id){
 
+        if(noticeService.removeById(id)){
+            //删除成功
+            return SystemConstant.DELETE_SUCCESS;
+        }
+        //删除失败
+        return SystemConstant.DELETE_ERROR;
+    }
 
 
 }

@@ -328,6 +328,46 @@
     }
 
 
+    /**
+     * 删除公告
+     * @param data
+     */
+    function deleteNotice(data) {
+      layer.confirm("确定要删除这条数据吗?",{"icon":3,"title":"提示"},function (index) {
+        $.post("/sys/notice/deleteById",{"id":data.id},function (result) {
+          if(result.success){
+            //刷新表格
+            tableIns.reload();
+          }
+          //显示提示信息
+          layer.msg(result.message);
+        },"json");
+        //关闭弹框
+        layer.close(index);
+      })
+    }
+
+
+    /**
+     * 查看公告
+     * @param data
+     */
+    function showNotice(data) {
+      mainIndex = layer.open({
+        type:1,
+        title:"查看公告",
+        area:["800px","500px"],
+        content:$("#showNoticeDiv"),//引用的内容窗口
+        success:function () {
+          $("#show_content").html(data.content);
+          $("#show_createtime").html(data.createtime);
+          $("#show_opername").html(data.opername);
+          $("#show_title").html(data.title);
+        }
+      });
+    }
+
+
   });
 </script>
 </body>
