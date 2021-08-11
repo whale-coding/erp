@@ -268,9 +268,40 @@
         }
 
 
+        /**
+         * 删除部门
+         * @param data  当前行的所有数据
+         */
+        function deleteDept(data) {
+            //判断该部门下是否有子节点，如果有子节点则提示无法删除，否则直接删除当前节点
+            $.post("/sys/dept/checkDeptHasChildren",{"id":data.id},function(result){
+                if(result.exist){
+                    layer.msg(result.message);
+                }else{
+                    //不存在则直接删除
+                    layer.confirm("确定要删除这条数据吗?",{"icon":3,"title":"提示"},function (index) {
+                        $.post("/sys/dept/deleteById",{"id":data.id},function (result) {
+                            if(result.success){
+                                //刷新数据表格
+                                tableIns.reload();
+                                //刷新下拉菜单树
+                                deptSelectTree.reload();
+                                //刷新左侧菜单树
+                                window.parent.left.reload();
+                            }
+                            //显示提示信息
+                            layer.msg(result.message);
+                        },"json");
+                        //关闭弹框
+                        layer.close(index);
+                    })
+                }
+            },"json");
+        }
 
 
     });
+
 
 
 

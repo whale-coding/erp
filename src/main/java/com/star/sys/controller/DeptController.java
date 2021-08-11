@@ -118,6 +118,44 @@ public class DeptController {
         return SystemConstant.UPDATE_ERROR;
     }
 
+    /**
+     * 检查当前部门下是否存在子节点
+     * @param id
+     * @return
+     */
+    @RequestMapping("/checkDeptHasChildren")
+    public String checkDeptHasChildren(int id){
+        Map<String,Object> map = new HashMap<String,Object>();
+        QueryWrapper<Dept> queryWrapper = new QueryWrapper<Dept>();
+        //根据父节点查询
+        queryWrapper.eq("pid",id);
+        //统计部门数量
+        int count = deptService.count(queryWrapper);
+        if(count>0){
+            //存在子节点
+            map.put(SystemConstant.EXIST,true);
+            map.put(SystemConstant.MESSAGE,"对不起，当前部门下有子节点，无法删除！");
+        }else{
+            //不存在子节点
+            map.put(SystemConstant.EXIST,false);
+        }
+        //将map集合转换成json
+        return JSON.toJSONString(map);
+    }
+
+    /**
+     * 删除部门
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteById")
+    public JSONResult deleteById(int id){
+        if(deptService.removeById(id)){
+            return SystemConstant.DELETE_SUCCESS;
+        }else{
+            return SystemConstant.DELETE_ERROR;
+        }
+    }
 
 }
 
