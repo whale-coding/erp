@@ -53,8 +53,8 @@
     </div>
 
     <div id="deptRowBar" style="display: none;">
-        <button type="button" class="layui-btn layui-btn-sm" ><span class="layui-icon layui-icon-edit"></span>更新</button>
-        <button type="button"  class="layui-btn layui-btn-sm layui-btn-danger" ><span class="layui-icon layui-icon-delete"></span>删除</button>
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="update" ><span class="layui-icon layui-icon-edit"></span>更新</button>
+        <button type="button"  class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete" ><span class="layui-icon layui-icon-delete"></span>删除</button>
     </div>
 </div>
 <!-- 数据表格结束 -->
@@ -73,6 +73,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">部门名称</label>
             <div class="layui-input-block">
+                <!--部门编号-->
                 <input type="hidden" name="id">
                 <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入部门名称" class="layui-input">
             </div>
@@ -231,6 +232,40 @@
 
             return false;
         });
+
+        //监听行工具栏事件
+        table.on("tool(deptTable)",function (obj) {
+            switch (obj.event) {
+                case 'update':
+                    openUpdateDeptWindow(obj.data);
+                    break;
+                case 'delete':
+                    //删除部门
+                    deleteDept(obj.data);
+                    break;
+            }
+        });
+
+        //修改部门信息
+        function openUpdateDeptWindow(data) {
+            mainIndex = layer.open({
+                type:1,
+                title:"更新部门",
+                area:["800px","500px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //表单数据回显
+                    form.val("dataFrm",data);
+                    //树节点回显
+                    dtree.dataInit("deptTree",data.pid);//父节点
+                    dtree.selectVal("deptTree");
+
+                    //添加的提交请求
+                    url = "/sys/dept/updateDept";
+                }
+            });
+
+        }
 
 
 

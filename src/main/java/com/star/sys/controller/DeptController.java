@@ -105,5 +105,19 @@ public class DeptController {
     }
 
 
+    /**
+     * 修改部门
+     * @param dept
+     * @return
+     */
+    @RequestMapping("/updateDept")
+    public JSONResult updateDept(Dept dept){
+        if(deptService.updateById(dept)){
+            return SystemConstant.UPDATE_SUCCESS;
+        }
+        return SystemConstant.UPDATE_ERROR;
+    }
+
+
 }
 
