@@ -1,5 +1,7 @@
 package com.star.sys.utils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
 public class TreeNode {
 
     private Integer id;//菜单节点编号
+    @JsonProperty(value = "parentId")   //返回json数据格式时生效
     private Integer pid;//父节点菜单编号
     private String title;//菜单节点名称
     private String icon;//菜单节点图标
