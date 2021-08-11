@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.sys.pojo.Dept;
 import com.star.sys.service.DeptService;
 import com.star.sys.utils.DataGridViewResult;
+import com.star.sys.utils.JSONResult;
 import com.star.sys.utils.SystemConstant;
 import com.star.sys.utils.TreeNode;
 import com.star.sys.vo.DeptVo;
@@ -16,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -92,7 +90,19 @@ public class DeptController {
         return new DataGridViewResult(page.getTotal(),page.getRecords());
     }
 
-
+    /**
+     * 添加部门
+     * @param dept
+     * @return
+     */
+    @RequestMapping("/addDept")
+    public JSONResult addDept(Dept dept){
+        dept.setCreatetime(new Date());
+        if(deptService.save(dept)){
+            return SystemConstant.ADD_SUCCESS;
+        }
+        return SystemConstant.ADD_ERROR;
+    }
 
 
 }
