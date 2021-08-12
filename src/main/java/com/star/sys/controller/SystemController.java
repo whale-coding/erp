@@ -101,4 +101,33 @@ public class SystemController {
     }
 
 
+    /**
+     * 去到权限管理页面-left左边树节点
+     * @return
+     */
+    @RequestMapping("/toPermissionLeft")
+    public String toPermissionLeft(){
+        return "system/permission/left";
+    }
+
+    /**
+     * 去到权限管理页面-right右边
+     * @return
+     */
+    @RequestMapping("/toPermissionRight")
+    public String toPermissionRight(){
+        return "system/permission/right";
+    }
+
+    /**
+     * 去到权限管理页面
+     * @return
+     */
+    @RequestMapping("/toPermissionManager")
+    public String toPermissionManager(){
+        return "system/permission/permissionManager";
+    }
+
+
+
 }
