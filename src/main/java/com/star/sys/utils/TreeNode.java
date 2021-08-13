@@ -20,6 +20,9 @@ public class TreeNode {
     //子节点菜单
     private List<TreeNode> children = new ArrayList<TreeNode>();
 
+    //是否选中的
+    private String checkArr = "0";
+
     public Integer getId() {
         return id;
     }
@@ -95,6 +98,14 @@ public class TreeNode {
         this.icon = icon;
         this.href = href;
         this.spread = spread;
+    }
+
+    public TreeNode(Integer id, Integer pid, String title, Boolean spread, String checkArr) {
+        this.id = id;
+        this.pid = pid;
+        this.title = title;
+        this.spread = spread;
+        this.checkArr = checkArr;
     }
 
 }

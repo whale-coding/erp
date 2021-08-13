@@ -22,6 +22,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Resource
     private RoleMapper roleMapper;
 
+    /**
+     * 根据id进行删除，删除两种表中的数据
+     * @param id
+     * @return
+     */
     @Override
     public boolean removeById(Serializable id) {
         //根据角色id删除两张关系表的数据,分别是：sys_role_user(角色用户关系表)，sys_role_permission(角色权限关系表)
@@ -30,5 +35,25 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         //调用删除角色权限关系表的方法
         roleMapper.deleteRolePermissionByRoleId(id);
         return super.removeById(id);
+    }
+
+
+    @Override
+    public boolean saveRolePermission(int rid, String ids) throws Exception {
+        try {
+            //先删除原有的数据
+            roleMapper.deleteRolePermissionByRoleId(rid);
+            //再保存新的关系数据
+            //拆分权限id字符串
+            String [] pids = ids.split(",");
+            for (int i = 0; i < pids.length; i++) {
+                //调用保存角色权限关系的方法
+                roleMapper.insertRolePermission(rid,pids[i]);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

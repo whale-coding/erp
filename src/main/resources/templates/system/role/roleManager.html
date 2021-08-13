@@ -260,6 +260,66 @@
         }
 
 
+        /**
+         * 分配权限
+         * @param data
+         */
+        function selectRolePermission(data) {
+            mainIndex = layer.open({
+                type:1,
+                title:"分配["+data.rolename+"]权限",
+                area:["500px","550px"],
+                content:$("#selectRolePermissionDiv"),//引用的内容窗口
+                btn: ['<span class="layui-icon layui-icon-ok">确定</span>', '<span class="layui-icon layui-icon-close">取消</span>'],
+                yes: function(index, layero){
+                    //按钮【按钮一】的回调
+                    //监听树节点的选中事件
+                    var permissionData = dtree.getCheckbarNodesParam("permissionTree");
+                    //声明数组对象
+                    var idArr = [];
+                    //循环遍历选中的节点id
+                    for(var i=0;i<permissionData.length;i++){
+                        //nodeId是当前选中的节点Id
+                        idArr.push(permissionData[i].nodeId);
+                    }
+                    //使用join()方法转成字符串
+                    var ids = idArr.join(",");//权限节点ID
+                    //判断是否有选中树节点
+                    if(ids.length!=0){
+
+                        //rid:是当前要分配权限的角色ID，ids:是选中的权限树节点id
+                        $.post("/sys/role/saveRolePermission",{"ids":ids,"rid":data.id},function(result){
+                            layer.msg(result.message);
+                        },"json");
+
+                    }else{
+                        layer.msg("请选择要分配的权限！");
+                    }
+                },
+
+                btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    //return false 开启该代码可禁止点击该按钮关闭
+                },
+
+                success:function () {
+                    //加载菜单树
+                    dtree.render({
+
+                        elem:"#permissionTree",
+                        url:"/sys/role/initPermissionByRoleId?roleId="+data.id,
+                        dataStyle: "layuiStyle",  //使用layui风格的数据格式
+                        response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+                        dataFormat:"list",
+                        checkbar: true,
+                        checkbarType: "all" // 默认就是all，其他的值为： no-all  p-casc   self  only
+
+                    });
+
+                }
+            });
+        }
+
     });
 </script>
 </body>
