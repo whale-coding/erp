@@ -145,7 +145,15 @@ public interface SystemConstant {
      */
     Integer HASHITERATIONS = 2;
 
+//===============================================================================================
+    /**
+     * 重置成功
+     */
+    JSONResult RESET_SUCCESS = new JSONResult(true,"重置成功");
 
-
+    /**
+     * 重置失败
+     */
+    JSONResult RESET_ERROR = new JSONResult(false,"重置失败");
 
 }

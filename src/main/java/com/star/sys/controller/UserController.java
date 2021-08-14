@@ -204,6 +204,27 @@ public class UserController {
         return SystemConstant.UPDATE_ERROR;
     }
 
+    /***
+     * 重置密码
+     * @param id
+     * @return
+     */
+    @RequestMapping("/resetPwd")
+    public JSONResult resetPwd(int id){
+        //重新生成UUID
+        String salt = UUIDUtil.randomUUID();
+        //创建用户对象
+        User user = new User();
+        user.setId(id);//主键
+        user.setSalt(salt);//新的salt盐值
+        user.setLoginpwd(PasswordUtil.md5(SystemConstant.DEFAULT_PWD,salt,SystemConstant.HASHITERATIONS));
+        //调用修改用户的方法
+        if(userService.updateById(user)){
+            return SystemConstant.RESET_SUCCESS;
+        }
+        return SystemConstant.RESET_ERROR;
+    }
+
 
 }
 

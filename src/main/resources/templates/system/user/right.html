@@ -445,8 +445,24 @@
         }
 
 
-
-
+        /**
+         * 重置密码
+         * @param data
+         */
+        function resetPwd(data) {
+            layer.confirm("确定要重置【<font color='red'>"+data.name+"</font>】的密码吗?",{"icon":3,"title":"提示"},function (index) {
+                $.post("/sys/user/resetPwd",{"id":data.id},function (result) {
+                    if(result.success){
+                        //刷新数据表格
+                        tableIns.reload();
+                    }
+                    //显示提示信息
+                    layer.msg(result.message);
+                },"json");
+                //关闭弹框
+                layer.close(index);
+            })
+        }
 
 
 
