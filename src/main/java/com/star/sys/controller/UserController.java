@@ -180,7 +180,29 @@ public class UserController {
     }
 
 
+    /**
+     * 根据用户ID查询用户详细信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/loadUserById")
+    public DataGridViewResult loadUserById(Integer id){
+        return new DataGridViewResult(userService.getById(id));
+    }
 
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    @RequestMapping("/updateUser")
+    public JSONResult updateUser(User user){
+        //调用修改用户的方法
+        if(userService.updateById(user)){
+            return SystemConstant.UPDATE_SUCCESS;
+        }
+        return SystemConstant.UPDATE_ERROR;
+    }
 
 
 }

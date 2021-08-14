@@ -389,6 +389,68 @@
 
 
 
+        /**
+         * 打开修改用户窗口
+         */
+        function openUpdateUserWindow(data) {
+            mainIndex = layer.open({
+                type:1,
+                title:"修改用户",
+                area:["800px","450px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //表单数据回显
+                    form.val("dataFrm",data);
+                    //树节点回显
+                    dtree.dataInit("deptTree",data.deptid);//部门编号
+                    dtree.selectVal("deptTree");
+                    //修改的提交请求
+                    url = "/sys/user/updateUser";
+                    //设置用户名称输入框只读
+                    $("#loginname").attr("readonly","readonly");
+                    //用户名称输入框的失去焦点要解绑
+                    $("#loginname").unbind("blur");
+
+                    //领导所属部门回显
+
+                    //获取当前用户的领导ID
+                    var mgrId = data.mgr;
+                    //查询该领导在哪个部门
+                    $.get("/sys/user/loadUserById",{"id":mgrId},function(result){
+                        //返回的用户数据
+                        var data = result.data;
+                        //树节点回显
+                        dtree.dataInit("mgrTree",data.deptid);//部门编号
+                        dtree.selectVal("mgrTree");
+
+                        //发送请求，查询该部门下的员工列表
+                        $.post("/sys/user/loadUserByDeptId",{"deptId":data.deptid},function(result){
+                            var html = "<option value=''>请选择所属领导</option>";
+                            //循环遍历
+                            for (var i=0;i<result.data.length;i++){
+                                html+="<option value='"+result.data[i].id+"'>"+result.data[i].name+"</option>";
+                            }
+                            //将拼接好的标签追加到下拉列表
+                            $("#mgr").html(html);
+                            //领导数据回显
+                            $("#mgr").val(mgrId);
+                            //重新渲染下拉菜单
+                            form.render("select");
+                        },"json");
+
+                    },"json");
+
+                }
+            });
+        }
+
+
+
+
+
+
+
+
 
 
 
