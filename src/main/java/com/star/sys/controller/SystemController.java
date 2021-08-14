@@ -137,6 +137,31 @@ public class SystemController {
         return "system/role/roleManager";
     }
 
+    /**
+     * 去到用户管理页面-left左边树节点
+     * @return
+     */
+    @RequestMapping("/toUserLeft")
+    public String toUserLeft(){
+        return "system/user/left";
+    }
 
+    /**
+     * 去到用户管理页面-right右边
+     * @return
+     */
+    @RequestMapping("/toUserRight")
+    public String toUserRight(){
+        return "system/user/right";
+    }
+
+    /**
+     * 去到用户管理页面
+     * @return
+     */
+    @RequestMapping("/toUserManager")
+    public String toUserManager(){
+        return "system/user/userManager";
+    }
 
 }

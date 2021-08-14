@@ -1,10 +1,12 @@
 package com.star.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.star.sys.pojo.User;
 import com.star.sys.mapper.UserMapper;
 import com.star.sys.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.star.sys.vo.UserVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,4 +34,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq("loginname",userName);
         return userMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public IPage<User> findUserListByPage(IPage<User> page, UserVo userVo) throws Exception {
+        return userMapper.findUserListByPage(page,userVo);
+    }
+
 }

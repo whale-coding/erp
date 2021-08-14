@@ -1,5 +1,6 @@
 package com.star.sys.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -92,5 +93,12 @@ public class User implements Serializable {
      * 备注
      */
     private String remark;
+
+
+    @TableField(exist = false)
+    private String deptName;//部门名称
+
+    @TableField(exist = false)
+    private String mgrName;//领导人姓名
 
 }

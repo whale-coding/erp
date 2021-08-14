@@ -1,11 +1,17 @@
 package com.star.sys.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.sys.pojo.Log;
+import com.star.sys.pojo.User;
 import com.star.sys.service.LogService;
+import com.star.sys.service.UserService;
+import com.star.sys.utils.DataGridViewResult;
 import com.star.sys.utils.JSONResult;
 import com.star.sys.utils.SystemConstant;
 import com.star.sys.vo.LoginUserVo;
+import com.star.sys.vo.UserVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -34,6 +40,9 @@ public class UserController {
 
     @Resource
     private LogService logService;
+
+    @Resource
+    private UserService userService;
 
     /**
      * 登录
@@ -73,6 +82,26 @@ public class UserController {
             return SystemConstant.LOGIN_ERROR_PASS;
         }
 
+    }
+
+
+    /**
+     * 查询用户列表
+     * @param userVo
+     * @return
+     */
+    @RequestMapping("/userList")
+    public DataGridViewResult userlist(UserVo userVo){
+        try {
+            //创建分页对象
+            IPage<User> page = new Page<User>(userVo.getPage(),userVo.getLimit());
+            //调用分页查询的方法
+            IPage<User> userIPage = userService.findUserListByPage(page,userVo);
+            return new DataGridViewResult(userIPage.getTotal(),userIPage.getRecords());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
