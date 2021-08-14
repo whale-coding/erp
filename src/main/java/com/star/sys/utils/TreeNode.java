@@ -11,7 +11,7 @@ import java.util.List;
 public class TreeNode {
 
     private Integer id;//菜单节点编号
-    @JsonProperty(value = "parentId")   //返回json数据格式时生效
+    @JsonProperty(value = "parentId")  //返回json数据格式时生效
     private Integer pid;//父节点菜单编号
     private String title;//菜单节点名称
     private String icon;//菜单节点图标
@@ -77,6 +77,14 @@ public class TreeNode {
 
     public void setChildren(List<TreeNode> children) {
         this.children = children;
+    }
+
+    public String getCheckArr() {
+        return checkArr;
+    }
+
+    public void setCheckArr(String checkArr) {
+        this.checkArr = checkArr;
     }
 
     public TreeNode() {
