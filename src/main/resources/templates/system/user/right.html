@@ -251,6 +251,147 @@
         });
 
 
+        //监听头部工具栏事件
+        table.on("toolbar(userTable)",function (obj) {
+            switch (obj.event) {
+                case "add":
+                    openAddUserWindow();
+                    break;
+            }
+        });
+
+        //监听行工具栏事件
+        table.on("tool(userTable)",function (obj) {
+            //获取当前行的数据
+            var data = obj.data;
+            switch (obj.event) {
+                case "update":     //更新
+                    openUpdateUserWindow(data);
+                    break;
+                case "resetPwd":    //重置密码
+                    resetPwd(data);
+                    break;
+                case "selectRole":    //分配角色
+                    selectRole(data);
+                    break;
+            }
+        });
+
+
+        //弹出层索引，提交路径
+        var mainIndex,url;
+
+        /**
+         * 打开添加用户窗口
+         */
+        function openAddUserWindow() {
+            mainIndex = layer.open({
+                type:1,
+                title:"添加用户",
+                area:["800px","450px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //清空表单数据
+                    $("#dataFrm")[0].reset();
+                    //清空部门编号的隐藏域
+                    $("#deptid").val("");
+                    //添加的提交请求
+                    url = "/sys/user/addUser";
+                }
+            });
+        }
+
+        //初始化所属部门下拉菜单树
+        var deptSelectTree = dtree.renderSelect({
+            width:"100%",
+            elem:"#deptTree",
+            url:"/sys/dept/loadDeptTreeLeft",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            dataFormat:"list"
+        });
+
+        //监听下拉树的选中事件
+        dtree.on("node(deptTree)",function (obj) {
+            //将选中的部门id赋值给隐藏域，用于保存所选中的属部门编号
+            $("#deptid").val(obj.param.nodeId);
+        });
+
+        //初始化领导部门下拉菜单树
+        var deptSelectTree = dtree.renderSelect({
+            width:"100%",
+            elem:"#mgrTree",
+            url:"/sys/dept/loadDeptTreeLeft",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            dataFormat:"list"
+        });
+
+        //监听下拉树的选中事件
+        dtree.on("node(mgrTree)",function (obj) {
+            //获取用户选中的部门ID
+            var deptId = obj.param.nodeId;
+            //发送请求，查询该部门下的员工列表
+            $.post("/sys/user/loadUserByDeptId",{"deptId":deptId},function(result){
+                var html = "<option value=''>请选择所属领导</option>";
+                //循环遍历
+                for (var i=0;i<result.data.length;i++){
+                    html+="<option value='"+result.data[i].id+"'>"+result.data[i].name+"</option>";
+                }
+                //将拼接好的标签追加到下拉列表
+                $("#mgr").html(html);
+                //重新渲染下拉菜单
+                form.render("select");
+            },"json");
+        });
+
+        var checkFlag = false;//标记是否存在，false为不存在
+
+        //绑定登录名称输入框的失去焦点事件
+        $("#loginname").bind("blur",function () {
+            //获取用户名
+            var loginName = $(this).val().trim();
+            //判断是否为空
+            if(loginName.length==0){
+                layer.msg("登录名称不能为空！");
+                return;
+            }
+            //发送验证的请求
+            $.post("/sys/user/checkLoginName",{"loginName":loginName},function(result){
+                if(result.exist){
+                    //将状态修改成true
+                    checkFlag = true;//存在，不可用
+                }else{
+                    checkFlag = false;//不存在，可用
+                }
+                //显示提示信息
+                layer.msg(result.message);
+            },"json");
+        });
+
+        //监听表单提交事件
+        form.on("submit(doSubmit)",function (data) {
+            //checkFlag为true表示存在
+            if(checkFlag){
+                layer.msg("登录名称已存在,请重新输入！");
+            }else{
+                $.post(url,data.field,function(result){
+                    if(result.success){
+                        tableIns.reload();//刷新数据表格
+                    }
+                    //提示验证信息
+                    layer.msg(result.message);
+                    //关闭窗口
+                    layer.close(mainIndex);
+                },"json");
+            }
+        });
+
+
+
+
+
+
 
 
 

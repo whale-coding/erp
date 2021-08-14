@@ -129,5 +129,23 @@ public interface SystemConstant {
 
 
 //===============================================================================================
+    /**
+     * 普通用户
+     */
+    Integer NORMAL_USER = 1;
+
+
+
+    /**
+     * 用户默认的初始化密码
+     */
+    String DEFAULT_PWD = "123456";
+    /**
+     * 加密次数
+     */
+    Integer HASHITERATIONS = 2;
+
+
+
 
 }
