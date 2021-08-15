@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.sys.pojo.Permission;
 import com.star.sys.pojo.User;
 import com.star.sys.service.PermissionService;
+import com.star.sys.service.RoleService;
+import com.star.sys.service.UserService;
 import com.star.sys.utils.*;
 import com.star.sys.vo.PermissionVo;
 import org.apache.commons.lang3.StringUtils;
@@ -15,10 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 首页树形菜单控制器
@@ -30,56 +29,83 @@ public class MenuController {
     @Resource
     private PermissionService permissionService;
 
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private RoleService roleService;
+
     /**
      * 加载首页左侧菜单树
      * @param permissionVo
      * @param session
      * @return
      */
-    @RequestMapping("/loadIndexLeftMenu")
-    public DataGridViewResult loadIndexLeftMenu(PermissionVo permissionVo, HttpSession session){
+    // @RequestMapping("/loadIndexLeftMenu")
+    @RequestMapping("/loadIndexLeftMenuTree")
+    public DataGridViewResult loadIndexLeftMenuTree(HttpSession session){
+        //创建条件构造器
+        QueryWrapper<Permission> queryWrapper = new QueryWrapper<Permission>();
+        //菜单类型type只查询值为menu(原因：type为menu的才是菜单)
+        queryWrapper.eq("type",SystemConstant.TYPE_MENU);
 
-        List<Permission> permissions=new ArrayList<>();
-
-        try {
-            QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("type", SystemConstant.TYPE_MENU);//只查询菜单
-            //获取当前登录用户
-            User user = (User) session.getAttribute(SystemConstant.LOGINUSER);
-            //如果当前登录用户为超级管理员，则能查看所有菜单
-            if(user.getType()==SystemConstant.SUPERUSER){
-                //查询菜单列表
-                permissions = permissionService.list(queryWrapper);
-            }else{//普通用户：需要根据当前用户的角色及权限加载菜单列表
-                //查询菜单列表
-                permissions = permissionService.list(queryWrapper);
+        //判断当前用户的角色是什么
+        //从session中获取当前登录的用户
+        User loginUser = (User) session.getAttribute(SystemConstant.LOGINUSER);
+        //创建集合保存权限菜单
+        List<Permission> permissionList = new ArrayList<Permission>();
+        //用户类型为0表示当前用户是超级管理员（超级管理员可以查看所有的功能菜单）
+        if(loginUser.getType()==SystemConstant.SUPERUSER){
+            //调用查询权限菜单列表的方法
+            permissionList = permissionService.list(queryWrapper);
+        }else{
+            //普通用户（非超级管理员）需要按照角色和权限查询
+            //调用查询权限菜单列表的方法
+            //该代码后期需要修改
+            //permissionList = permissionService.list(queryWrapper);
+            try {
+                //1.根据当前登录用户ID查询该用户拥有的角色列表
+                Set<Integer> currentUserRoleIds = userService.findUserRoleByUserId(loginUser.getId());
+                //2.创建集合保存每个角色下拥有的权限菜单ID
+                Set<Integer> pids = new HashSet<Integer>();
+                //3.循环遍历当前用户拥有的角色列表
+                for (Integer roleId : currentUserRoleIds) {
+                    //4.根据角色ID查询每个角色下拥有的权限菜单
+                    Set<Integer> permissionIds = roleService.findRolePermissionByRoleId(roleId);
+                    //5.将查询出来的权限id放到集合中
+                    pids.addAll(permissionIds);
+                }
+                //判断当前权限集合是否有数据
+                if(pids.size()>0){
+                    //拼接查询条件
+                    queryWrapper.in("id",pids);
+                    //执行查询
+                    permissionList = permissionService.list(queryWrapper);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            //构建菜单节点集合
-            List<TreeNode> treeNodes = new ArrayList<>();
-            for (Permission permission : permissions) {
-                //判断当前节点是否展开，是则为true，否则为false
-                Boolean spread = SystemConstant.OPEN_TRUE == permission.getOpen() ? true : false;
-
-                TreeNode treeNode=new TreeNode();
-                treeNode.setId(permission.getId()); //菜单节点id
-                treeNode.setPid(permission.getPid()); //父节点id
-                treeNode.setHref(permission.getHref()); //菜单路径
-                treeNode.setIcon(permission.getIcon()); //菜单图标
-                treeNode.setTitle(permission.getTitle()); //菜单名称
-                treeNode.setSpread(spread);  //菜单是否展开
-                // 将树节点对象添加到树节点集合
-                treeNodes.add(treeNode);
-            }
-            //构建节点菜单层级关系(参数1：节点集合数据源，参数2：根节点编号)
-            List<TreeNode> treeNodeList = TreeNodeBuilder.build(treeNodes,1);
-            //将节点返回出去
-            return new DataGridViewResult(treeNodeList);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+        //创建集合，保存树节点
+        List<TreeNode> treeNodes = new ArrayList<TreeNode>();
+        //循环遍历权限菜单列表
+        for (Permission permission : permissionList) {
+            //判断当前节点是否展开，是则为true，否则为false
+            Boolean spread = SystemConstant.OPEN_TRUE == permission.getOpen() ? true : false;
+            TreeNode treeNode = new TreeNode();
+            treeNode.setId(permission.getId());//菜单节点id
+            treeNode.setPid(permission.getPid());//父节点编号
+            treeNode.setHref(permission.getHref());//菜单路径
+            treeNode.setIcon(permission.getIcon());//菜单图标
+            treeNode.setTitle(permission.getTitle());//菜单名称
+            treeNode.setSpread(spread);//是否展开
+            //将树节点对象添加到树节点集合
+            treeNodes.add(treeNode);
+        }
+        //构建层级关系
+        List<TreeNode> treeNodeList = TreeNodeBuilder.build(treeNodes,1);
+        return new DataGridViewResult(treeNodeList);
     }
-
 
 
 

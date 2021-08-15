@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -48,9 +48,9 @@
 <div>
     <table class="layui-hide" id="deptTable" lay-filter="deptTable"></table>
     <!-- 工具栏 -->
-    <div id="deptToolBar" style="display: none;">
-        <button type="button"  class="layui-btn layui-btn-sm" lay-event="add" ><span class="layui-icon layui-icon-add-1"></span>添加部门</button>
-    </div>
+    <button type="button"  class="layui-btn layui-btn-sm" lay-event="add" shiro:hasPermission="dept:create">
+        <span class="layui-icon layui-icon-add-1"></span>添加部门
+    </button>
 
     <div id="deptRowBar" style="display: none;">
         <button type="button" class="layui-btn layui-btn-sm" lay-event="update" ><span class="layui-icon layui-icon-edit"></span>更新</button>

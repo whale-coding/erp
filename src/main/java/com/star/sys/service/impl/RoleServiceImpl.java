@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * <p>
@@ -55,5 +56,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             e.printStackTrace();
         }
         return false;
+    }
+
+
+
+    @Override
+    public Set<Integer> findRolePermissionByRoleId(Integer roleId) throws Exception {
+        return roleMapper.findRolePermissionByRoleId(roleId);
     }
 }
