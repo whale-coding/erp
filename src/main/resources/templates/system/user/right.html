@@ -465,7 +465,68 @@
         }
 
 
+        /**
+         * 分配角色
+         */
+        function selectRole(data) {
+            mainIndex = layer.open({
+                type:1,
+                title:"分配【"+data.name+"】的角色",
+                area:["800px","450px"],
+                content:$("#selectUserRoleDiv"),//引用的内容窗口
+                btn: ['<span class="layui-icon layui-icon-ok">确定</span>', '<span class="layui-icon layui-icon-close">取消</span>'],
+                yes: function(index, layero){
+                    //获取选中行
+                    var checkStatus = table.checkStatus('roleTable');
+                    //判断是否有选中行
+                    if(checkStatus.data.length==0){
+                        layer.msg("请选择要分配的角色！");
+                    }else{
+                        //定义数组
+                        var idArr = [];
+                        //循环选中行
+                        for (var i = 0; i < checkStatus.data.length; i++) {
+                            idArr.push(checkStatus.data[i].id);//id是角色编号
+                        }
+                        //将数组拼成字符串
+                        var ids = idArr.join(",");
+                        //发送请求
+                        $.post("/sys/user/saveUserRole",{"userId":data.id,"roleIds":ids},function(result){
+                            layer.msg(result.message);
+                        },"json");
+                        //关闭当前窗口
+                        layer.close(mainIndex);
+                    }
+                },
+                btn2: function(index, layero){
+                },
+                success:function () {
+                    //初始化角色列表的表格数据
+                    initRoleTable(data);
+                }
+            });
+        }
 
+        /**
+         * 初始化角色列表的表格数据
+         * @param data
+         */
+        function initRoleTable(data) {
+            table.render({
+                elem: '#roleTable'//绑定表格组件的id元素
+                ,url:'/sys/user/initRoleByUserId'//数据发送的请求路径
+                ,where:{
+                    "id":data.id//用户编号ID
+                }
+                ,cols: [ [
+                    {type:"checkbox",align:'center'},
+                    {field:'id', title:'ID',align:'center'}
+                    ,{field:'rolecode', title:'角色编码',align:'center'}
+                    ,{field:'rolename', title:'角色名称',align:'center'}
+                    ,{field:'remark', title:'备注',align:'center'}
+                ] ]
+            });
+        }
 
 
 

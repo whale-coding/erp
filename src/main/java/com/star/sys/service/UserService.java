@@ -5,6 +5,8 @@ import com.star.sys.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.star.sys.vo.UserVo;
 
+import java.util.Set;
+
 /**
  * <p>
  *  服务类
@@ -31,4 +33,24 @@ public interface UserService extends IService<User> {
      * @throws Exception
      */
     IPage<User> findUserListByPage(IPage<User> page, UserVo userVo) throws Exception;
+
+
+
+    /**
+     * 根据用户ID查询该用户拥有的角色列表
+     * @param id    用户id
+     * @return
+     * @throws Exception
+     */
+    Set<Integer> findUserRoleByUserId(int id) throws Exception;
+
+    /**
+     * 保存用户与角色的关系
+     * @param userId
+     * @param roleIds
+     * @return
+     * @throws Exception
+     */
+    boolean saveUserRole(int userId, String roleIds) throws Exception;
+
 }

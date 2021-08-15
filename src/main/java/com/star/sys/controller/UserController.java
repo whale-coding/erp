@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.sys.pojo.Log;
 import com.star.sys.pojo.User;
 import com.star.sys.service.LogService;
+import com.star.sys.service.RoleService;
 import com.star.sys.service.UserService;
 import com.star.sys.utils.*;
 import com.star.sys.vo.LoginUserVo;
@@ -24,10 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -46,6 +44,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private RoleService roleService;
 
     /**
      * 登录
@@ -223,6 +224,57 @@ public class UserController {
             return SystemConstant.RESET_SUCCESS;
         }
         return SystemConstant.RESET_ERROR;
+    }
+
+
+    /**
+     * 初始化角色列表表格数据
+     * @param id    用户编号
+     * @return
+     */
+    @RequestMapping("/initRoleByUserId")
+    public DataGridViewResult initRoleByUserId(int id){
+        //查询所有的角色列表
+        List<Map<String,Object>> mapList = roleService.listMaps();
+        try {
+            //调用查询当前用户已经拥有的角色列表的方法(查询当前用户ID自己已经有的角色列表)
+            Set<Integer> roleIdsList = userService.findUserRoleByUserId(id);
+            //循环比较当前用户已经拥有的角色，已经拥有的角色要选中
+            for (Map<String, Object> objectMap : mapList) {
+                //定义变量，标记是否选中，false表示不选中
+                boolean flag = false;
+                //取出所有角色的ID
+                int roleId =(int)objectMap.get("id");
+                //内层循环：循环用户已经有的角色列表
+                for (Integer rid : roleIdsList) {
+                    //比较rid与roleId是否相等，相等意味着该角色是有的，要选中
+                    if(rid==roleId){
+                        flag = true;//选中
+                        break;
+                    }
+                }
+                //将选中的状态放到集合中
+                objectMap.put("LAY_CHECKED",flag);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new DataGridViewResult(Long.valueOf(mapList.size()),mapList);
+    }
+
+
+    @RequestMapping("/saveUserRole")
+    public JSONResult saveUserRole(int userId,String roleIds){
+        try {
+            if(userService.saveUserRole(userId,roleIds)){
+                return SystemConstant.DISTRIBUTE_SUCCESS;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SystemConstant.DISTRIBUTE_ERROR;
+
     }
 
 
