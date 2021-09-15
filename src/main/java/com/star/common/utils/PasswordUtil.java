@@ -1,4 +1,4 @@
-package com.star.sys.utils;
+package com.star.common.utils;
 
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.Sha1Hash;

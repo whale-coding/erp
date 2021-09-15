@@ -9,7 +9,7 @@ import com.star.sys.pojo.User;
 import com.star.sys.service.PermissionService;
 import com.star.sys.service.RoleService;
 import com.star.sys.service.UserService;
-import com.star.sys.utils.*;
+import com.star.common.utils.*;
 import com.star.sys.vo.PermissionVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -6,7 +6,7 @@ import com.star.sys.pojo.User;
 import com.star.sys.service.PermissionService;
 import com.star.sys.service.RoleService;
 import com.star.sys.service.UserService;
-import com.star.sys.utils.SystemConstant;
+import com.star.common.utils.SystemConstant;
 import com.star.sys.vo.LoginUserVo;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

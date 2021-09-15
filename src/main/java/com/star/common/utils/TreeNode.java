@@ -1,4 +1,4 @@
-package com.star.sys.utils;
+package com.star.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package com.star.sys.utils;
+package com.star.common.utils;
 
 /**
  * layui 数据表格类

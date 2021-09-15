@@ -1,4 +1,4 @@
-package com.star.sys.utils;
+package com.star.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
