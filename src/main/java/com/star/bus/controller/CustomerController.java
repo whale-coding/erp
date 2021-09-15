@@ -8,11 +8,14 @@ import com.star.bus.pojo.Customer;
 import com.star.bus.service.CustomerService;
 import com.star.bus.vo.CustomerVo;
 import com.star.common.utils.DataGridViewResult;
+import com.star.common.utils.JSONResult;
+import com.star.common.utils.SystemConstant;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * <p>
@@ -30,7 +33,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     /**
-     *
+     * 客户列表
      * @param customerVo
      * @return
      */
@@ -52,6 +55,66 @@ public class CustomerController {
         //返回数据
         return new DataGridViewResult(page.getTotal(),page.getRecords());
     }
+
+    /**
+     * 添加客户
+     * @param customer
+     * @return
+     */
+    @RequestMapping("/addCustomer")
+    public JSONResult addCustomer(Customer customer){
+        if (customerService.save(customer)){
+            return SystemConstant.ADD_SUCCESS;
+        }
+        return SystemConstant.ADD_ERROR;
+    }
+
+    /**
+     * 修改客户信息
+     * @param customer
+     * @return
+     */
+    @RequestMapping("/updateCustomer")
+    public JSONResult updateCustomer(Customer customer){
+        if (customerService.updateById(customer)){
+            return SystemConstant.UPDATE_SUCCESS;
+        }
+        return SystemConstant.UPDATE_ERROR;
+    }
+
+    /**
+     * 删除客户信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteById")
+    public JSONResult deleteCustomer(Integer id){
+        if (customerService.removeById(id)){
+            return SystemConstant.DELETE_SUCCESS;
+        }
+        return SystemConstant.DELETE_ERROR;
+    }
+
+    /**
+     * 批量删除客户
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/batchDelete")
+    public JSONResult batchDelete(String ids){
+        //将字符串拆分成数组
+        String[] idsStr=ids.split(",");
+        //判断是否删除成功
+        if (customerService.removeByIds(Arrays.asList(idsStr))){  //将字符数组转换为List集合作为参数
+            //删除成功
+            return SystemConstant.DELETE_SUCCESS;
+        }else {
+            //删除失败
+            return SystemConstant.DELETE_ERROR;
+        }
+    }
+
+
 
 }
 

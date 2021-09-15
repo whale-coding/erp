@@ -74,30 +74,88 @@
     <form class="layui-form" style="width:80%;margin-top: 20px;" id="dataFrm" lay-filter="dataFrm">
         <!-- 隐藏域，保存角色id -->
         <input type="hidden" name="id">
-        <div class="layui-form-item layui-row layui-col-xs12">
-            <label class="layui-form-label">角色编码</label>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">客户名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="customername" lay-verify="require" autocomplete="off" placeholder="请输入客户名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">公司电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="telephone" lay-verify="require" autocomplete="off" placeholder="请输入公司电话" class="layui-input">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-block">
+                    <input type="text" name="linkman" lay-verify="require" autocomplete="off" placeholder="请输入联系人" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="phone" lay-verify="require|phone" autocomplete="off" placeholder="请输入联系人电话" class="layui-input">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">邮编</label>
+                <div class="layui-input-block">
+                    <input type="text" name="zipcode" lay-verify="require" autocomplete="off" placeholder="请输入客户邮编" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" lay-verify="require|email" autocomplete="off" placeholder="请输入客户邮箱" class="layui-input">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">开户银行</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank" lay-verify="require|number" autocomplete="off" placeholder="请输入开户银行" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">传真</label>
+                <div class="layui-input-block">
+                    <input type="text" name="fax" lay-verify="require" autocomplete="off" placeholder="请输入客户传真" class="layui-input">
+                </div>
+            </div>
+        </div >
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="rolecode"  lay-verify="required" placeholder="请输入角色编码">
+                <input type="text" name="account" lay-verify="require" autocomplete="off" placeholder="请输入客户账号" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item layui-row layui-col-xs12">
-            <label class="layui-form-label">角色名称</label>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司地址</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="rolename"  lay-verify="required" placeholder="请输入角色名称">
+                <input type="text" name="address" lay-verify="require" autocomplete="off" placeholder="请输入公司地址" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item layui-row layui-col-xs12">
-            <label class="layui-form-label">角色备注</label>
-            <div class="layui-input-block">
-                <textarea placeholder="请输入角色备注" name="remark" id="remark" class="layui-textarea userDesc"></textarea>
-            </div>
-        </div>
+
+
         <div class="layui-form-item layui-row layui-col-xs12">
             <div class="layui-input-block" style="text-align: center;">
-                <button type="button" class="layui-btn" lay-submit lay-filter="doSubmit"><span class="layui-icon layui-icon-add-1"></span>提交</button>
+                <button type="button" class="layui-btn" lay-submit lay-filter="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
                 <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
             </div>
         </div>
+
+
     </form>
 </div>
 <!-- 添加和修改的弹出层结束 -->
@@ -160,6 +218,147 @@
             });
         });
 
+        //监听头部工具栏事件
+        table.on("toolbar(customerTable)",function (obj) {
+            switch (obj.event) {
+                case "add":
+                    openAddCustomerLayer();  //调用打开添加客户窗口方法
+                    break;
+                case "batchDelete":
+                    batchDelete();  //调用批量删除方法
+                    break;
+            }
+        });
+
+        //弹出层索引，提交路径
+        var mainIndex,url;
+        /**
+         * 打开添加客户窗口
+         */
+        function openAddCustomerLayer() {
+            mainIndex = layer.open({
+                type:1,
+                title:"添加客户",
+                area:["800px","500px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //清空表单数据
+                    $("#dataFrm")[0].reset();
+                    //添加的提交请求
+                    url = "/bus/customer/addCustomer";
+                }
+            });
+        }
+
+        //监听表单提交按钮（添加菜单和修改菜单）
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url,data.field,function(result){
+                if(result.success){
+                    tableIns.reload();  //刷新数据表格
+                }
+                //显示提示信息
+                layer.msg(result.message);
+                //关闭当前窗口
+                layer.close(mainIndex);
+            },"json");
+
+            return false;
+        });
+
+        /**
+         * 批量删除
+         */
+        function batchDelete() {
+            //获取选中行
+            var checkStatus = table.checkStatus('customerTable'); //customerTable 即为lay-filter的属性值
+            //获取选中的数量
+            var length = checkStatus.data.length;
+            //判断长度是否大于0
+            if(length>0){
+                //提示是否删除
+                layer.confirm("确定要删除这"+length+"条数据吗?", {icon: 3, title:'提示'}, function(index){
+                    var checkData = checkStatus.data;//获取每一行的数据
+                    //声明数组，保存选中行的id
+                    var idArr = [];
+                    for(var i=0;i<length;i++){
+                        //获取选中行的id
+                        idArr.push(checkData[i].id);
+                    }
+                    //id数组
+                    var ids = idArr.join(",");
+                    //发送删除的请求
+                    $.post("/bus/customer/batchDelete",{"ids":ids},function (result) {
+                        //判断是否成功
+                        if(result.success){
+                            //删除成功后刷新数据表格
+                            tableIns.reload();
+                        }
+                        layer.msg(result.message);//弹出提示信息
+                    },"json");
+
+                    //关闭提示框
+                    layer.close(index);
+                });
+            }else{
+                //没有选中行，提示请选择要删除的行！
+                layer.msg("请选择要删除的行！",{icon: 0});
+            }
+        }
+
+
+        //监听行工具栏事件
+        table.on("tool(customerTable)",function (obj) {
+            //获取当前行数据
+            var data=obj.data;
+            switch (obj.event) {
+                case 'update':
+                    openUpdateCustomerLayer(data);
+                    break;
+                case 'delete':
+                    //删除角色
+                    deleteCustomer(data);
+                    break;
+            }
+        });
+
+
+        /**
+         * 打开修改角色弹出层
+         * @param data
+         */
+        function openUpdateCustomerLayer(data) {
+            mainIndex = layer.open({
+                type:1,
+                title:"更新客户",
+                area:["800px","500px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //表单数据回显
+                    form.val("dataFrm",data);
+                    //添加的提交请求
+                    url = "/bus/customer/updateCustomer";
+                }
+            });
+        }
+
+        /**
+         * 删除角色
+         * @param data
+         */
+        function deleteCustomer(data) {
+            layer.confirm("确定要删除这条数据吗?",{"icon":3,"title":"提示"},function (index) {
+                $.post("/bus/customer/deleteById",{"id":data.id},function (result) {
+                    if(result.success){
+                        //刷新数据表格
+                        tableIns.reload();
+                    }
+                    //显示提示信息
+                    layer.msg(result.message);
+                },"json");
+                //关闭弹框
+                layer.close(index);
+            })
+        }
 
     });
 </script>
