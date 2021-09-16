@@ -16,4 +16,12 @@
         id, replyContent, checkUserId, checkTime, leavebillId
     </sql>
 
+    <select id="findLeaveBillCheckListByLeaveBillId" resultType="com.star.bus.pojo.LeavebillCheck">
+        select c.*,u.name checkPersonName From bus_leavebill_check c
+        inner join bus_leavebill l on l.id=c.leavebillId
+        inner join sys_user u on u.id=c.checkUserId
+        where c.leavebillId=#{leavebillId}
+        order by c.checkTime desc
+    </select>
+
 </mapper>

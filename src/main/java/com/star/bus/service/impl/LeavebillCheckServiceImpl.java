@@ -11,6 +11,7 @@ import com.star.bus.vo.LeavebillVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -23,4 +24,10 @@ import javax.annotation.Resource;
 @Service
 public class LeavebillCheckServiceImpl extends ServiceImpl<LeavebillCheckMapper, LeavebillCheck> implements LeavebillCheckService {
 
+    @Resource
+    private LeavebillCheckMapper leavebillCheckMapper;
+    @Override
+    public List<LeavebillCheck> findLeaveBillCheckListByLeaveBillId(Integer id) throws Exception {
+        return leavebillCheckMapper.findLeaveBillCheckListByLeaveBillId(id);
+    }
 }

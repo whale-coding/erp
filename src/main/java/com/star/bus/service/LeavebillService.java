@@ -3,8 +3,11 @@ package com.star.bus.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.star.bus.pojo.Leavebill;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.star.bus.pojo.LeavebillCheck;
 import com.star.bus.vo.LeavebillVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -24,6 +27,7 @@ public interface LeavebillService extends IService<Leavebill> {
      * @throws Exception
      */
     IPage<Leavebill> findLeaveBillByPage( IPage<Leavebill> page, LeavebillVo leavebillVo) throws Exception;
+
 
 
 }

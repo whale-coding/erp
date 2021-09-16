@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -16,6 +19,7 @@ import java.io.Serializable;
  * @since 2021-09-16
  */
 @TableName("bus_leavebill_check")
+@Data
 public class LeavebillCheck implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -42,7 +46,7 @@ public class LeavebillCheck implements Serializable {
      * 审批时间
      */
     @TableField("checkTime")
-    private LocalDateTime checkTime;
+    private Date checkTime;
 
     /**
      * 请假单id
@@ -51,54 +55,9 @@ public class LeavebillCheck implements Serializable {
     private Integer leavebillId;
 
 
-    public Integer getId() {
-        return id;
-    }
+    @TableField(exist = false)
+    private String checkPersonName;  //审批人
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
-    public String getReplyContent() {
-        return replyContent;
-    }
 
-    public void setReplyContent(String replyContent) {
-        this.replyContent = replyContent;
-    }
-
-    public Integer getCheckUserId() {
-        return checkUserId;
-    }
-
-    public void setCheckUserId(Integer checkUserId) {
-        this.checkUserId = checkUserId;
-    }
-
-    public LocalDateTime getCheckTime() {
-        return checkTime;
-    }
-
-    public void setCheckTime(LocalDateTime checkTime) {
-        this.checkTime = checkTime;
-    }
-
-    public Integer getLeavebillId() {
-        return leavebillId;
-    }
-
-    public void setLeavebillId(Integer leavebillId) {
-        this.leavebillId = leavebillId;
-    }
-
-    @Override
-    public String toString() {
-        return "LeavebillCheck{" +
-        "id=" + id +
-        ", replyContent=" + replyContent +
-        ", checkUserId=" + checkUserId +
-        ", checkTime=" + checkTime +
-        ", leavebillId=" + leavebillId +
-        "}";
-    }
 }

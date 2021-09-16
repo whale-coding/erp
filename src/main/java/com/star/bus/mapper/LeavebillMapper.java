@@ -3,8 +3,11 @@ package com.star.bus.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.star.bus.pojo.Leavebill;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.star.bus.pojo.LeavebillCheck;
 import com.star.bus.vo.LeavebillVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>

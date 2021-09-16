@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.bus.pojo.Customer;
 import com.star.bus.pojo.Leavebill;
+import com.star.bus.service.LeavebillCheckService;
 import com.star.bus.service.LeavebillService;
 import com.star.bus.vo.LeavebillVo;
 import com.star.common.utils.DataGridViewResult;
@@ -35,6 +36,9 @@ public class LeavebillController {
 
     @Resource
     private LeavebillService leavebillService;
+
+    @Resource
+    private LeavebillCheckService leavebillCheckService;
 
     /**
      * 请假单列表
@@ -130,7 +134,6 @@ public class LeavebillController {
             return SystemConstant.DELETE_ERROR;
         }
     }
-
 
 
 }

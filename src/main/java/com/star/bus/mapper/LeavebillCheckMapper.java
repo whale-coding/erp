@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.star.bus.vo.LeavebillVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -16,5 +18,12 @@ import org.apache.ibatis.annotations.Param;
  * @since 2021-09-16
  */
 public interface LeavebillCheckMapper extends BaseMapper<LeavebillCheck> {
+    /**
+     * 根据请假单id查询该请假单的送审信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    List<LeavebillCheck> findLeaveBillCheckListByLeaveBillId(Integer id) throws Exception;
 
 }
