@@ -60,7 +60,7 @@ public class LeavebillController {
 
 
     /**
-     * 添加客户
+     * 添加请假单
      * @param leavebill
      * @return
      */
@@ -88,6 +88,32 @@ public class LeavebillController {
         }
         return SystemConstant.ADD_ERROR;
     }
+
+    /**
+     * 修改请假单
+     * @param leavebill
+     * @return
+     */
+    @RequestMapping("/updateLeaveBill")
+    public JSONResult updateLeaveBill(Leavebill leavebill){
+        //设置请假状态
+        if (leavebill.getState()==0){
+            leavebill.setState(0);   //新创建
+        }else if (leavebill.getState()==1){
+            leavebill.setState(1);   //已提交，待审批
+            leavebill.setCommittime(new Date());  //请假单提交时间
+        }
+
+        //修改请假单
+        if (leavebillService.updateById(leavebill)){
+            return SystemConstant.ADD_SUCCESS;
+        }
+        return SystemConstant.ADD_ERROR;
+    }
+
+
+
+
 
 }
 

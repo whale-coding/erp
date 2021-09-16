@@ -92,7 +92,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">请假天数</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" name="days" lay-verify="required" placeholder="请输入请假天数">
+                    <input type="text" class="layui-input" name="days" lay-verify="required|number" placeholder="请输入请假天数">
                 </div>
             </div>
             <div class="layui-inline">
@@ -261,8 +261,8 @@
                 case 'add':
                     openAddLeaveBillLayer();
                     break;
-                case 'add':
-                    openAddGoodsTypeLayer();
+                case 'update':
+                    openUpdateLeaveBillLayer();
                     break;
                 case 'add':
                     openAddGoodsTypeLayer();
@@ -333,7 +333,41 @@
             return false;
         });
 
+        /**
+         * 打开修改请假单弹出层
+         * @param data
+         */
+        function openUpdateLeaveBillLayer(data) {
+            //获取当前选中行
+            var checkStatus=table.checkStatus('leavebillTable');
+            //获取选中行的个数
+            var length=checkStatus.data.length;
+            //判断是否有选中行
+            if (length!=1){
+                layer.msg("请选择一行要修改的数据!");
+                return;
+            }
+            //判断请假单状态是否为新创建及审核未通过
+            if (checkStatus.data[0].state==0||checkStatus.data[0].state==3){
+                mainIndex = layer.open({
+                    type:1,
+                    title:"更新请假单状态",
+                    area:["800px","500px"],
+                    content:$("#addOrUpdateDiv"),//引用的内容窗口
+                    success:function () {
+                        //表单数据回显
+                        form.val("dataFrm",checkStatus.data[0]);
+                        //添加的提交请求
+                        url = "/bus/leavebill/updateLeaveBill";
+                    }
+                });
+            }else {
+                layer.msg("只能修改状态为新创建及审核未通过的请假单!");
+            }
+        }
         
+
+
 
     });
 </script>
