@@ -1,6 +1,7 @@
 package com.star.bus.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -117,6 +120,46 @@ public class GoodsTypeController {
             return SystemConstant.UPDATE_SUCCESS;
         }
         return SystemConstant.UPDATE_ERROR;
+    }
+
+
+    /**
+     * 检查当前商品分类下是否存在子节点
+     * @param id
+     * @return
+     */
+    @RequestMapping("/checkGoodsTypeHasChildren")
+    public String checkGoodsTypeHasChildren(int id){
+        Map<String,Object> map = new HashMap<>();
+        QueryWrapper<GoodsType> queryWrapper = new QueryWrapper<>();
+        //根据父节点查询
+        queryWrapper.eq("pid",id);
+        //统计商品分类数量
+        int count = goodsTypeService.count(queryWrapper);
+        if(count>0){
+            //存在子节点
+            map.put(SystemConstant.EXIST,true);
+            map.put(SystemConstant.MESSAGE,"对不起，当前商品分类下有子节点，无法删除！");
+        }else{
+            //不存在子节点
+            map.put(SystemConstant.EXIST,false);
+        }
+        //将map集合转换成json
+        return JSON.toJSONString(map);
+    }
+
+    /**
+     * 删除部门
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteById")
+    public JSONResult deleteById(int id){
+        if(goodsTypeService.removeById(id)){
+            return SystemConstant.DELETE_SUCCESS;
+        }else{
+            return SystemConstant.DELETE_ERROR;
+        }
     }
 
 
