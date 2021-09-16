@@ -62,33 +62,30 @@
 <div  style="display: none;padding: 5px" id="addOrUpdateDiv">
     <form class="layui-form" style="width:90%;" id="dataFrm" lay-filter="dataFrm">
         <div class="layui-form-item">
-            <label class="layui-form-label">父级部门</label>
+            <label class="layui-form-label">父级分类</label>
             <div class="layui-input-block">
-                <!-- 隐藏域，保存选中的部门编号 -->
+                <!-- 隐藏域，保存选中的商品分类编号 -->
                 <input type="hidden" name="pid" id="pid">
-                <ul id="deptTree" class="dtree" data-id="0"></ul>
+                <!--菜单树-->
+                <ul id="goodsTypeTree" class="dtree" data-id="0"></ul>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">部门名称</label>
+            <label class="layui-form-label">分类名称</label>
             <div class="layui-input-block">
-                <!--部门编号-->
+                <!--分类编号-->
                 <input type="hidden" name="id">
-                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入部门名称" class="layui-input">
+
+                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入分类名称" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">部门地址</label>
+            <label class="layui-form-label">分类图标</label>
             <div class="layui-input-block">
-                <input type="text" name="address" lay-verify="required" autocomplete="off" placeholder="请输入部门地址" class="layui-input">
+                <input type="text" name="address" lay-verify="required" autocomplete="off" placeholder="请输入分类图标" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">部门备注</label>
-            <div class="layui-input-block">
-                <textarea class="layui-textarea" name="remark" id="content"></textarea>
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">是否展开</label>
@@ -96,6 +93,13 @@
                     <input type="radio" name="open" value="1" title="是" checked="">
                     <input type="radio" name="open" value="0" title="否" >
                 </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类备注</label>
+            <div class="layui-input-block">
+                <textarea class="layui-textarea" name="remark" id="content"></textarea>
             </div>
         </div>
 
@@ -108,8 +112,6 @@
     </form>
 </div>
 <!-- 添加和修改的弹出层结束 -->
-
-
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
@@ -168,6 +170,74 @@
                 }
             });
         });
+
+
+        //头部工具栏监听事件
+        table.on("toolbar(goodsTypeTable)",function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    openAddGoodsTypeLayer();
+                    break;
+            }
+        });
+
+        //弹出层索引，提交路径
+        var mainIndex,url;
+
+        //打开添加商品分类窗口
+        function openAddGoodsTypeLayer() {
+            mainIndex = layer.open({
+                type:1,
+                title:"添加商品分类",
+                area:["800px","500px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //清空表单数据
+                    $("#dataFrm")[0].reset();
+                    //添加的提交请求
+                    url = "/bus/goodstype/addGoodsType";
+                }
+            });
+        }
+
+        //初始化父级的下拉菜单树
+        var  goodsTypeSelectTree = dtree.renderSelect({
+            width:"100%",
+            elem:"#goodsTypeTree",
+            url:"/bus/goodstype/loadGoodsTypeTreeLeft",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+            dataFormat:"list"
+        });
+
+        //监听下拉树的选中事件
+        dtree.on("node(goodsTypeTree)",function (obj) {
+            //将选中的部门id赋值给隐藏域，用于保存父级部门id
+            $("#pid").val(obj.param.nodeId);
+        });
+
+        //监听表单的提交事件
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url,data.field,function(result){
+                if(result.success){
+                    //刷新数据表格
+                    tableIns.reload();
+                    //刷新下拉菜单树
+                    goodsTypeSelectTree.reload();
+                    //刷新左侧菜单树
+                    window.parent.left.reload();
+                }
+                //显示提示信息
+                layer.msg(result.message);
+                //关闭当前窗口
+                layer.close(mainIndex);
+            },"json");
+
+            return false;
+        });
+
+
+
 
     });
 

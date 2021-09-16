@@ -8,9 +8,10 @@ import com.star.bus.pojo.GoodsType;
 import com.star.bus.service.GoodsTypeService;
 import com.star.bus.vo.goodsTypeVo;
 import com.star.common.utils.DataGridViewResult;
+import com.star.common.utils.JSONResult;
+import com.star.common.utils.SystemConstant;
 import com.star.common.utils.TreeNode;
-import com.star.sys.pojo.Dept;
-import com.star.sys.vo.DeptVo;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -88,6 +90,23 @@ public class GoodsTypeController {
         //返回数据
         return new DataGridViewResult(page.getTotal(),page.getRecords());
     }
+
+    /**
+     * 添加商品分类
+     * @param goodsType
+     * @return
+     */
+    @RequestMapping("/addGoodsType")
+    public JSONResult addGoodsType(GoodsType goodsType){
+        if(goodsTypeService.save(goodsType)){
+            return SystemConstant.ADD_SUCCESS;
+        }
+        return SystemConstant.ADD_ERROR;
+    }
+
+
+
+
 
 }
 
