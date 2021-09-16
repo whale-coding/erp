@@ -51,6 +51,14 @@ public class BusinessController {
         return "business/leavebill/leavebillManager";
     }
 
+    /**
+     * 去到我的待审批页面
+     * @return
+     */
+    @RequestMapping("/toMyCheckManager")
+    public String toMyCheckManager(){
+        return "business/leavebill/myCheckManager";
+    }
 
 
 
