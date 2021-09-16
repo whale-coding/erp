@@ -169,14 +169,21 @@
             });
         });
 
-
-
     });
 
 
-
-
-
+    /**
+     * 加载数据表格的方法
+     * @param deptId
+     */
+    function loadTableData(goodsTypeId) {
+        tableIns.reload({
+            where:{"id":goodsTypeId},
+            page:{
+                curr:1
+            }
+        });
+    }
 
 </script>
 </body>
