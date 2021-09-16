@@ -264,11 +264,11 @@
                 case 'update':
                     openUpdateLeaveBillLayer();
                     break;
-                case 'add':
-                    openAddGoodsTypeLayer();
+                case 'batchDelete':
+                    batchDelete();
                     break;
-                case 'add':
-                    openAddGoodsTypeLayer();
+                case 'show':
+                    showLeaveBill();
                     break;
             }
         });
@@ -365,7 +365,56 @@
                 layer.msg("只能修改状态为新创建及审核未通过的请假单!");
             }
         }
-        
+
+
+        /**
+         * 批量删除
+         */
+        function batchDelete() {
+            //获取选中行
+            var checkStatus = table.checkStatus('leavebillTable'); //即为lay-filter的属性值
+            //获取选中的数量
+            var length = checkStatus.data.length;
+            //判断长度是否大于0,大于0则删除
+            if(length>0){
+                //判断选择行中是否有非新创建的请假单(只能删除新创建的请假单)
+                for (var i=0;i<length;i++){
+                    if (checkStatus.data[i].state!=0){
+                        layer.alert('只能删除状态为<font color="blue"> 新创建 </font>的请假单!',{icon:0});
+                        return;
+                    }
+                }
+                //提示是否删除
+                layer.confirm("确定要删除这"+length+"条数据吗?", {icon: 3, title:'提示'}, function(index){
+                    var checkData = checkStatus.data;//获取每一行的数据
+                    //声明数组，保存选中行的id
+                    var idArr = [];
+                    for(var i=0;i<length;i++){
+                        //获取选中行的id
+                        idArr.push(checkData[i].id);
+                    }
+                    //id数组
+                    var ids = idArr.join(",");
+                    //发送删除的请求
+                    $.post("/bus/leavebill/batchDelete",{"ids":ids},function (result) {
+                        //判断是否成功
+                        if(result.success){
+                            //删除成功后刷新数据表格
+                            tableIns.reload();
+                        }
+                        layer.msg(result.message);//弹出提示信息
+                    },"json");
+
+                    //关闭提示框
+                    layer.close(index);
+                });
+            }else{
+                //没有选中行，提示请选择要删除的行！
+                layer.msg("请选择要删除的行！",{icon: 0});
+            }
+        }
+
+
 
 
 
