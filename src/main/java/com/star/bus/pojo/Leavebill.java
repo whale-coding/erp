@@ -3,7 +3,6 @@ package com.star.bus.pojo;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
@@ -75,6 +74,12 @@ public class Leavebill implements Serializable {
      * 请假单提交时间
      */
     private Date committime;
+
+    @TableField(exist = false)
+    private String username;  //请假人
+
+    @TableField(exist = false)
+    private String mgrname;   //审批人
 
 
 }

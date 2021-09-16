@@ -21,4 +21,27 @@
         id, title, content, days, leavetime, createtime, userid, state, checkPerson, committime
     </sql>
 
+    <select id="findLeaveBillByPage" resultType="com.star.bus.pojo.Leavebill">
+        select l.*,u.name username,m.name mgrname from bus_leavebill l
+        inner join sys_user u on u.id=l.userid
+        inner join sys_user m on m.id=l.checkPerson
+        <where>
+            <if test="leavebillVo.userid !=null">
+                and l.userid = #{leavebillVo.userid}
+            </if>
+            <if test="leavebillVo.title !=null and leavebillVo.title !=''">
+                and l.title like concat('%',#{leavebillVo.title},'%')
+            </if>
+            <if test="leavebillVo.state !=null">
+                and l.state = #{leavebillVo.state}
+            </if>
+            <if test="leavebillVo.startTime !=null">
+                and l.leavetime &gt; #{leavebillVo.startTime}
+            </if>
+            <if test="leavebillVo.endTime !=null">
+                and l.leavetime &lt; #{leavebillVo.endTime}
+            </if>
+        </where>
+    </select>
+
 </mapper>
