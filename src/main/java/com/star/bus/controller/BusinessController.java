@@ -42,5 +42,16 @@ public class BusinessController {
         return "business/goodstype/right";
     }
 
+    /**
+     * 去到查看请假单页面
+     * @return
+     */
+    @RequestMapping("/toLeaveBillManager")
+    public String toLeaveBillManager(){
+        return "business/leavebill/leavebillManager";
+    }
+
+
+
 
 }
