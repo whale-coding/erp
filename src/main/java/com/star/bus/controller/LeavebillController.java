@@ -3,10 +3,12 @@ package com.star.bus.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.star.bus.pojo.Customer;
 import com.star.bus.pojo.Leavebill;
 import com.star.bus.service.LeavebillService;
 import com.star.bus.vo.LeavebillVo;
 import com.star.common.utils.DataGridViewResult;
+import com.star.common.utils.JSONResult;
 import com.star.common.utils.SystemConstant;
 import com.star.sys.pojo.User;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * <p>
@@ -53,6 +56,37 @@ public class LeavebillController {
             e.printStackTrace();
         }
         return new DataGridViewResult(page.getTotal(),page.getRecords());
+    }
+
+
+    /**
+     * 添加客户
+     * @param leavebill
+     * @return
+     */
+    @RequestMapping("/addLeaveBill")
+    public JSONResult addLeaveBill(Leavebill leavebill,HttpSession session){
+        //获取当前登录用户
+        User user=(User) session.getAttribute(SystemConstant.LOGINUSER);
+        //设置请假人
+        leavebill.setUserid(user.getId());
+        //设置审批人
+        leavebill.setCheckPerson(user.getMgr());
+        //设置请假时间
+        leavebill.setCreatetime(new Date());
+        //设置请假状态
+        if (leavebill.getState()==0){
+            leavebill.setState(0);   //新创建
+        }else if (leavebill.getState()==1){
+            leavebill.setState(1);   //已提交，待审批
+            leavebill.setCommittime(new Date());  //请假单提交时间
+        }
+
+        //保存请假单
+        if (leavebillService.save(leavebill)){
+            return SystemConstant.ADD_SUCCESS;
+        }
+        return SystemConstant.ADD_ERROR;
     }
 
 }

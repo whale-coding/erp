@@ -212,11 +212,10 @@
             ,page: true
             ,cols: [ [
                 {type: 'checkbox', fixed: 'left',align:'center'}
-                ,{field:'id', title:'请假单ID',align:'center',width:'60'}
-                ,{field:'title', title:'请假单标题',align:'center',width:'120'}
-                ,{field:'content', title:'请假内容',align:'center',width:'100'}
-                ,{field:'days', title:'请假天数',align:'center',width:'150'}
-                ,{field:'leavetime', title:'请假时间',align:'center',width:'100'}
+                ,{field:'id', title:'请假单ID',align:'center',width:'100'}
+                ,{field:'title', title:'请假单标题',align:'center',width:'180'}
+                ,{field:'days', title:'请假天数',align:'center',width:'100'}
+                ,{field:'leavetime', title:'请假时间',align:'center',width:'150'}
                 ,{field:'createtime', title:'创建时间',align:'center',width:'150'}
                 ,{field:'username', title:'请假人',align:'center',width:'150'}
                 ,{field:'mgrname', title:'审批人',align:'center',width:'180'}
@@ -254,6 +253,84 @@
                     curr:1
                 }
             });
+        });
+
+        //头部工具栏监听事件
+        table.on("toolbar(leavebillTable)",function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    openAddLeaveBillLayer();
+                    break;
+                case 'add':
+                    openAddGoodsTypeLayer();
+                    break;
+                case 'add':
+                    openAddGoodsTypeLayer();
+                    break;
+                case 'add':
+                    openAddGoodsTypeLayer();
+                    break;
+            }
+        });
+
+        //弹出层索引，提交路径
+        var mainIndex,url;
+
+        /**
+         * 打开添加请假单窗口
+         */
+        function openAddLeaveBillLayer() {
+            mainIndex = layer.open({
+                type:1,
+                title:"添加请假单",
+                area:["800px","500px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //清空表单数据
+                    $("#dataFrm")[0].reset();
+                    //添加的提交请求
+                    url = "/bus/leavebill/addLeaveBill";
+                }
+            });
+        }
+
+        /**
+         * 监听保存按钮
+         */
+        form.on("submit(doSave)",function (data) {
+            var param=data.field;  //提交的参数
+            param.state=0;  //添加请假单状态(已保存)
+            $.post(url,param,function(result){
+                if(result.success){
+                    tableIns.reload();  //刷新数据表格
+                }
+                //显示提示信息
+                layer.msg(result.message);
+                //关闭当前窗口
+                layer.close(mainIndex);
+            },"json");
+
+            return false;
+        });
+
+
+        /**
+         * 监听提交按钮
+         */
+        form.on("submit(doSubmit)",function (data) {
+            var param=data.field;  //提交的参数
+            param.state=1;  //添加请假单状态(待审批)
+            $.post(url,param,function(result){
+                if(result.success){
+                    tableIns.reload();  //刷新数据表格
+                }
+                //显示提示信息
+                layer.msg(result.message);
+                //关闭当前窗口
+                layer.close(mainIndex);
+            },"json");
+
+            return false;
         });
 
         
