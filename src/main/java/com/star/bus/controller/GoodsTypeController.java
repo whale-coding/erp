@@ -12,6 +12,7 @@ import com.star.common.utils.JSONResult;
 import com.star.common.utils.SystemConstant;
 import com.star.common.utils.TreeNode;
 
+import com.star.sys.pojo.Dept;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -105,7 +106,18 @@ public class GoodsTypeController {
     }
 
 
-
+    /**
+     * 修改商品分类
+     * @param goodsType
+     * @return
+     */
+    @RequestMapping("/updateGoodsType")
+    public JSONResult updateGoodsType(GoodsType goodsType){
+        if(goodsTypeService.updateById(goodsType)){
+            return SystemConstant.UPDATE_SUCCESS;
+        }
+        return SystemConstant.UPDATE_ERROR;
+    }
 
 
 }

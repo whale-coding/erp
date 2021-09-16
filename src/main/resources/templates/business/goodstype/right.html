@@ -236,6 +236,44 @@
             return false;
         });
 
+        //监听行工具栏事件
+        table.on("tool(goodsTypeTable)",function (obj) {
+            switch (obj.event) {
+                case 'update':
+                    openUpdateGoodsTypeLayer(obj.data);
+                    break;
+                case 'delete':
+                    //删除分类
+                    deleteGoodsType(obj.data);
+                    break;
+            }
+        });
+
+        /**
+         * 修改分类信息
+         * @param data
+         */
+        function openUpdateGoodsTypeLayer(data) {
+            mainIndex = layer.open({
+                type:1,
+                title:"更新分类信息",
+                area:["800px","500px"],
+                content:$("#addOrUpdateDiv"),//引用的内容窗口
+                success:function () {
+                    //表单数据回显
+                    form.val("dataFrm",data);
+                    //树节点回显
+                    dtree.dataInit("goodsTypeTree",data.pid);//父节点
+                    dtree.selectVal("goodsTypeTree");
+
+                    //添加的提交请求
+                    url = "/bus/goodstype/updateGoodsType";
+                }
+            });
+
+        }
+
+
 
 
 
