@@ -22,17 +22,12 @@
         <form class="layui-form" >
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">部门名称</label>
+                    <label class="layui-form-label">分类名称</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="title" id="title" class="layui-input searchVal" placeholder="请输入部门名称" />
+                        <input type="text" name="title" id="title" class="layui-input searchVal" placeholder="请输入分类名称" />
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">部门地址</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="address" id="address" class="layui-input searchVal" placeholder="请输入地址" />
-                    </div>
-                </div>
+
                 <div class="layui-inline">
                     <button type="button" class="layui-btn" lay-submit lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
                     <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
@@ -46,13 +41,17 @@
 
 <!-- 数据表格开始 -->
 <div>
-    <table class="layui-hide" id="deptTable" lay-filter="deptTable"></table>
-    <!-- 工具栏 -->
-    <button type="button"  class="layui-btn layui-btn-sm" lay-event="add" shiro:hasPermission="dept:create">
-        <span class="layui-icon layui-icon-add-1"></span>添加部门
-    </button>
+    <table class="layui-hide" id="goodsTypeTable" lay-filter="goodsTypeTable"></table>
+    <!-- 头部工具栏 -->
+    <div id="goodsTypeBar" style="display: none;">
+        <button type="button"  class="layui-btn layui-btn-sm" lay-event="add">
+            <span class="layui-icon layui-icon-add-1"></span>添加分类
+        </button>
+    </div>
 
-    <div id="deptRowBar" style="display: none;">
+
+    <!--行工具栏-->
+    <div id="goodsTypeRowBar" style="display: none;">
         <button type="button" class="layui-btn layui-btn-sm" lay-event="update" ><span class="layui-icon layui-icon-edit"></span>更新</button>
         <button type="button"  class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete" ><span class="layui-icon layui-icon-delete"></span>删除</button>
     </div>
@@ -113,6 +112,72 @@
 
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
 
+    var tableIns;
+    layui.extend({
+        dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['jquery','form','table','layer','dtree'],function () {
+        var $=layui.jquery;
+        var form=layui.form;
+        var table=layui.table;
+        var layer=layui.layer;
+        var dtree = layui.dtree;
+
+        //渲染数据表格
+        tableIns = table.render({
+            elem: '#goodsTypeTable'//绑定表格组件的id元素
+            ,url:'/bus/goodstype/goodsTypeList'//数据发送的请求路径
+            ,toolbar: '#goodsTypeBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '商品分类数据表'
+            ,height:'full-150'
+            ,page: true
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'ID',align:'center',width:80}
+                ,{field:'pid', title:'父节点ID',align:'center',width:120}
+                ,{field:'title', title:'分类名称',align:'center'}
+                ,{field:'icon', title:'图标',align:'center',templet:function (d) {
+                        return "<i class='layui-icon'>"+d.icon+"</i>";
+                    }}
+                ,{field:'open', title:'是否展开',align:'center',templet:function (d) {
+                        return d.open == 1 ? "<font color='blue'>是</font>" :"<font color='red'>否</font>";
+                    }}
+                ,{field:'remark', title:'备注',align:'center'}
+                ,{field:'right', title:'操作',align:'center',toolbar:"#goodsTypeRowBar",width:200}
+            ] ]
+            //回调函数
+            ,done:function (res,curr,count) {
+                // 判断当前页码是否大于1
+                if(curr>1 && res.data.length == 0){
+                    //当前页码-1
+                    var pageValue = curr - 1;
+                    tableIns.reload({
+                        page:{curr:pageValue}// 修改页码
+                    })
+                }
+            }
+        });
+
+        //监听模糊查询按钮点击事件
+        form.on("submit(doSearch)",function (data) {
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+        });
+
+
+
+    });
+
+
+
+
+
+
+</script>
 </body>
 </html>

@@ -1,11 +1,17 @@
 package com.star.bus.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.bus.pojo.GoodsType;
 import com.star.bus.service.GoodsTypeService;
+import com.star.bus.vo.goodsTypeVo;
 import com.star.common.utils.DataGridViewResult;
 import com.star.common.utils.TreeNode;
 import com.star.sys.pojo.Dept;
+import com.star.sys.vo.DeptVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +64,30 @@ public class GoodsTypeController {
         return new DataGridViewResult(treeNodes);
     }
 
+    /**
+     * 商品分类列表
+     * @param goodsTypeVo
+     * @return
+     */
+    @RequestMapping("/goodsTypeList")
+    public DataGridViewResult goodsTypeList(goodsTypeVo goodsTypeVo){
+        //创建分页对象
+        IPage<GoodsType> page = new Page<>(goodsTypeVo.getPage(),goodsTypeVo.getLimit());
+        //创建条件构造器对象
+        QueryWrapper<GoodsType> wrapper = new QueryWrapper<>();
+        //分类名称查询
+        wrapper.like(StringUtils.isNotBlank(goodsTypeVo.getTitle()),"title",goodsTypeVo.getTitle());
 
+        //分类编号
+        wrapper.eq(goodsTypeVo.getId()!=null,"id",goodsTypeVo.getId())
+                .or().eq(goodsTypeVo.getId()!=null,"pid", goodsTypeVo.getId());
+        //排序
+        wrapper.orderByAsc("id");
+        //调用查询的方法
+        goodsTypeService.page(page,wrapper);
+        //返回数据
+        return new DataGridViewResult(page.getTotal(),page.getRecords());
+    }
 
 }
 
