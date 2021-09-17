@@ -92,6 +92,10 @@ public class Goods implements Serializable {
      * 供应商编号
      */
     private Integer providerid;
+    /**
+     * 是否可用
+     */
+    private Integer  available;
 
 
     @TableField(exist = false)

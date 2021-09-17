@@ -88,6 +88,7 @@
 	<table class="layui-hide" id="goodsTable" lay-filter="goodsTable"></table>
 	<div id="goodsToolBar" style="display: none;">
 		<button type="button" lay-event="add" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-add-1"></span>添加商品</button>
+		<button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
 	</div>
 	
 	<div id="goodsRowBar" style="display: none;">
@@ -247,6 +248,9 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 		      ,{field:'goodsimg', title:'商品图片',align:'center',width:'100', templet:function(d){
 		    	  return '<img width=40 height=40 src=/file/showImageByPath?path='+d.goodsimg+ ' />';
 		      }}
+			 ,{field:'available', title:'是否可用',align:'center',width:'100',templet:function(d){
+					 return d.available==1?'<font color=blue>可用</font>':'<font color=red>不可用</font>';
+			 	}}
 		      ,{fixed: 'right', title:'操作', toolbar: '#goodsRowBar',align:'center',width:'200'}
 		    ] ]
 		      ,done: function(res, curr, count){ //处理删除某一页最后一条数据的BUG
@@ -301,9 +305,9 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 			    case 'add':
 			     openAddLayer();   //添加
 			    break;
-			    // case 'batchDelete':
-			    // 	batchDelete();  //批量删除
-			    // break;
+			    case 'batchDelete':
+			    	batchDelete();  //批量删除
+			    break;
 			  };
 		});
 
