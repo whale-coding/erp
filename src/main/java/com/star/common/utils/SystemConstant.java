@@ -162,4 +162,13 @@ public interface SystemConstant {
      */
      String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultgoodsimg.png";
 
+    /**
+     * 操作成功
+     */
+    JSONResult  OPERATE_SUCCESS=new JSONResult(true, "操作成功");
+    /**
+     * 操作失败
+     */
+    JSONResult  OPERATE_ERROR=new JSONResult(false, "操作失败");
+
 }

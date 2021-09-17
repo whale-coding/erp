@@ -406,8 +406,45 @@ layui.use(['jquery','form','table','layer','laydate'],function(){
 		});
 	}
 
+	/**
+	 * 打开商品退货的弹出层
+	 * @param data
+	 */
+	function back(data){
+		mainIndex=layer.open({
+			type:1,
+			content:$("#backGoodsDiv"),
+			area:['800px','500px'],
+			title:'商品退货',
+			success:function(){
+				$("#dataBackFrm")[0].reset();
+				//装载新的数据
+				form.val("dataBackFrm",{id:data.id,currentnumber:data.number});
+			}
+		});
+	}
 
+	//自定义验证规则
+	form.verify({
+		checknumber: function(value){
+			var currentnumber=parseInt($("#currentnumber").val());
+			if(parseInt(value)>currentnumber||parseInt(value)<1){
+				return '退货数量只能在【0】-【'+currentnumber+"】数量之间";
+			}
+		}
+	});
 
+	//退货提交
+	form.on("submit(doBackSubmit)",function(data){
+		$.post("/bus/outport/addOutport",data.field,function(result){
+			if(result.success){
+				tableIns.reload();
+			}
+			layer.msg(result.message);
+			layer.close(mainIndex);
+		})
+		return false;
+	});
 
 
 
