@@ -136,6 +136,7 @@
 					</div>
 				</div>
 				<div class="layui-col-md3 layui-col-xs5">
+					<!--文件上传div-->
 					<div class="layui-upload-list thumbBox mag0 magt3">
 
 						<input type="hidden" name="goodsimg" id="goodsimg" value="images/defaultgoodsimg.png">
@@ -325,9 +326,11 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 		});
 
 
-	var mainIndex;
-	var url;
-	//打开添加的弹出层
+	var mainIndex,url;
+
+	/**
+	 * 打开添加商品的弹出层
+	 */
 	function openAddLayer(){
 		mainIndex=layer.open({
 			type:1,
@@ -369,7 +372,20 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 
 
 
-
+	//文件上传
+	upload.render({
+		elem: '.thumbBox',
+		url: '/file/uploadFile',
+		acceptMime:'image/*',    //文件筛选，筛选出图片
+		field:'mf',  //后台接收参数
+		method : "post",
+		done: function(res, index, upload){
+			var path=res.path;
+			$('.thumbImg').attr('src','/file/showImageByPath?path='+path);
+			$('.thumbBox').css("background","#fff");
+			$("#goodsimg").val(path);//给隐藏域赋值
+		}
+	});
 
 
 

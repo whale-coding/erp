@@ -156,4 +156,10 @@ public interface SystemConstant {
      */
     JSONResult RESET_ERROR = new JSONResult(false,"重置失败");
 
+
+    /**
+     * 商品默认图片
+     */
+     String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultgoodsimg.png";
+
 }
