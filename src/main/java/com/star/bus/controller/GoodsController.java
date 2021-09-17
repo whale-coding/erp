@@ -114,5 +114,37 @@ public class GoodsController {
 
 
 
+    /**
+     * 修改商品
+     */
+    @RequestMapping("/updateGoods")
+    public JSONResult updateGoods(GoodsVo goodsVo) {
+        try {
+            //说明是不默认图片
+            if(!(goodsVo.getGoodsimg()!=null&&goodsVo.getGoodsimg().equals(SystemConstant.IMAGES_DEFAULTGOODSIMG_PNG))) {
+                //判断是否需要改名字
+                if(goodsVo.getGoodsimg().endsWith("_temp")) {
+                    String newName=FileUtils.renameFile(goodsVo.getGoodsimg());
+                    goodsVo.setGoodsimg(newName);
+                    //删除原先的图片
+                    String oldPath=goodsService.getById(goodsVo.getId()).getGoodsimg();
+                    FileUtils.removeFileByPath(oldPath);
+                }
+            }
+            //更新商品
+            goodsService.updateById(goodsVo);
+
+            return SystemConstant.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SystemConstant.UPDATE_ERROR;
+        }
+    }
+
+
+
+
+
+
 }
 
