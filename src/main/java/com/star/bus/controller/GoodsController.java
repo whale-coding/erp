@@ -12,7 +12,10 @@ import com.star.bus.service.GoodsService;
 import com.star.bus.service.GoodsTypeService;
 import com.star.bus.service.ProviderService;
 import com.star.bus.vo.GoodsVo;
+import com.star.common.fileUtil.FileUtils;
 import com.star.common.utils.DataGridViewResult;
+import com.star.common.utils.JSONResult;
+import com.star.common.utils.SystemConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -86,6 +89,27 @@ public class GoodsController {
         }
         //返回数据
         return new DataGridViewResult(page.getTotal(),page.getRecords());
+    }
+
+
+    /**
+     * 添加商品
+     */
+    @RequestMapping("/addGoods")
+    public JSONResult addGoods(GoodsVo goodsVo) {
+        try {
+            //如果图片是上传的，需要改名字
+            if(goodsVo.getGoodsimg()!=null&&goodsVo.getGoodsimg().endsWith("_temp")) {
+                String newName= FileUtils.renameFile(goodsVo.getGoodsimg());  //调用工具类，给图片改名字
+
+                goodsVo.setGoodsimg(newName);
+            }
+            goodsService.save(goodsVo);
+            return SystemConstant.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SystemConstant.ADD_ERROR;
+        }
     }
 
 

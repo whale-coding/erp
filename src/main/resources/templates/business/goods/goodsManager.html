@@ -339,7 +339,7 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 			title:'添加商品',
 			success:function(){
 				$("#dataFrm")[0].reset();
-				url="/goods/addGoods";
+				url="/bus/goods/addGoods";
 				//加载供应商
 				$.get("/bus/provider/loadAllProviderForSelect",function(res){
 					var data=res.data;
@@ -369,6 +369,21 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 			}
 		});
 	}
+
+
+	/**
+	 * 监听提交按钮
+	 */
+	form.on("submit(doSubmit)",function(data){
+		$.post(url,data.field,function(result){
+			if(result.success){
+				tableIns.reload();
+			}
+			layer.msg(result.message);
+			layer.close(mainIndex);
+		})
+		return false;
+	});
 
 
 
