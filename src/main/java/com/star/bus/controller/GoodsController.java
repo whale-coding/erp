@@ -142,6 +142,22 @@ public class GoodsController {
     }
 
 
+    /**
+     * 删除商品
+     */
+    @RequestMapping("/deleteGoods")
+    public JSONResult deleteGoods(Integer id,String goodsimg) {
+        try {
+            //删除原文件
+            FileUtils.removeFileByPath(goodsimg);
+            goodsService.removeById(id);
+            return SystemConstant.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SystemConstant.DELETE_ERROR;
+        }
+    }
+
 
 
 

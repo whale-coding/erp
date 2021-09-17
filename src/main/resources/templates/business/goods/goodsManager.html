@@ -455,6 +455,19 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 		}
 	});
 
+	//删除
+	function deleteGoods(data){
+		layer.confirm('你确定要删除【'+data.goodsname+'】这个商品吗?', {icon: 3, title:'提示'}, function(index){
+			$.post("/bus/goods/deleteGoods",{id:data.id,goodsimg:data.goodsimg},function(result){
+				if(result.success){
+					tableIns.reload();
+				}
+				layer.msg(result.message);
+			})
+			layer.close(index);
+		});
+	}
+
 
 
 
