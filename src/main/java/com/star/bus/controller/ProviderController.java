@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -118,6 +119,19 @@ public class ProviderController {
             //删除失败
             return SystemConstant.DELETE_ERROR;
         }
+    }
+
+    /**
+     * 加载所有可用的供应商
+     */
+    @RequestMapping("/loadAllProviderForSelect")
+    public  DataGridViewResult loadAllProviderForSelect(){
+        QueryWrapper<Provider> wrapper=new QueryWrapper();
+        //只查询可用的供应商
+        wrapper.eq("available",1);
+        List<Provider> list=providerService.list(wrapper);
+
+        return new DataGridViewResult(list);
     }
 
 }

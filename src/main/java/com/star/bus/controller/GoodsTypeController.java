@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.star.bus.pojo.GoodsType;
+import com.star.bus.pojo.Provider;
 import com.star.bus.service.GoodsTypeService;
 import com.star.bus.vo.goodsTypeVo;
 import com.star.common.utils.DataGridViewResult;
@@ -160,6 +161,19 @@ public class GoodsTypeController {
         }else{
             return SystemConstant.DELETE_ERROR;
         }
+    }
+
+
+    /**
+     * 加载所有的商品分类
+     */
+    @RequestMapping("/loadAllGoodsTypeForSelect")
+    public  DataGridViewResult loadAllGoodsTypeForSelect(){
+        QueryWrapper<GoodsType> wrapper=new QueryWrapper();
+        //只查询可用的商品分类(id=1的为总菜单，需要排除)
+        wrapper.ne("id",1);
+        List<GoodsType> list=goodsTypeService.list(wrapper);
+        return new DataGridViewResult(list);
     }
 
 

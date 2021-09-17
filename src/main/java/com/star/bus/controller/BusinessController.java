@@ -20,7 +20,7 @@ public class BusinessController {
      * @return
      */
     @RequestMapping("/toGoodsTypeManager")
-    public String toGoodsManager(){
+    public String toGoodsTypeManager(){
         return "business/goodstype/goodsTypeManager";
     }
 
@@ -68,6 +68,15 @@ public class BusinessController {
     @RequestMapping("/toProviderManager")
     public String toProviderManager(){
         return "business/provider/providerManager";
+    }
+
+    /**
+     * 去到商品管理页面
+     * @return
+     */
+    @RequestMapping("/toGoodsManager")
+    public String toGoodsManager(){
+        return "business/goods/goodsManager";
     }
 
 
