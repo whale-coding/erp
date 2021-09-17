@@ -14,12 +14,17 @@ import com.star.bus.service.InportService;
 import com.star.bus.service.ProviderService;
 import com.star.bus.vo.InportVo;
 import com.star.common.utils.DataGridViewResult;
+import com.star.common.utils.JSONResult;
+import com.star.common.utils.SystemConstant;
+import com.star.sys.pojo.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,5 +84,45 @@ public class InportController {
         //返回数据
         return new DataGridViewResult(page.getTotal(),page.getRecords());
     }
+
+
+    /**
+     * 添加商品进货
+     */
+    @RequestMapping("/addInport")
+    public JSONResult addInport(InportVo inportVo, HttpSession session) {
+        try {
+            inportVo.setInporttime(new Date());
+            //获取当前登录用户
+            User user=(User) session.getAttribute(SystemConstant.LOGINUSER);
+            inportVo.setOperateperson(user.getName());
+            inportService.save(inportVo);
+            return SystemConstant.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SystemConstant.ADD_ERROR;
+        }
+    }
+
+
+    /**
+     * 修改商品进货
+     */
+    @RequestMapping("/updateInport")
+    public JSONResult updateInport(InportVo inportVo) {
+        try {
+            inportService.updateById(inportVo);
+            return SystemConstant.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SystemConstant.UPDATE_ERROR;
+        }
+    }
+
+
+
+
+
+
 }
 

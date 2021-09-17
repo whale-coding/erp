@@ -177,5 +177,24 @@ public class GoodsController {
     }
 
 
+    /**
+     *根据供应商ID查询商品信息
+     */
+    @RequestMapping("/loadGoodsByProviderId")
+    public DataGridViewResult loadGoodsByProviderId(Integer providerid) {
+        QueryWrapper<Goods> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("available", 1);
+        queryWrapper.eq(providerid!=null, "providerid", providerid);
+        List<Goods> list = goodsService.list(queryWrapper);
+        for (Goods goods : list) {
+            Provider provider = providerService.getById(goods.getProviderid());
+            if(null!=provider) {
+                goods.setProviderName(provider.getProvidername());
+            }
+        }
+        return new DataGridViewResult(list);
+    }
+
+
 }
 
