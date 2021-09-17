@@ -393,7 +393,18 @@ layui.use(['jquery','form','table','layer','laydate'],function(){
 		return false;
 	});
 
-
+	//删除
+	function deleteInport(data){
+		layer.confirm('你确定要删除这个商品进货吗?', {icon: 3, title:'提示'}, function(index){
+			$.post("/bus/inport/deleteInport",{id:data.id},function(result){
+				if(result.success){
+					tableIns.reload();
+				}
+				layer.msg(result.message);
+			})
+			layer.close(index);
+		});
+	}
 
 
 

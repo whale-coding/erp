@@ -120,7 +120,19 @@ public class InportController {
     }
 
 
-
+    /**
+     * 删除商品进货
+     */
+    @RequestMapping("/deleteInport")
+    public JSONResult deleteInport(Integer id) {
+        try {
+            inportService.removeById(id);
+            return SystemConstant.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SystemConstant.DELETE_ERROR;
+        }
+    }
 
 
 

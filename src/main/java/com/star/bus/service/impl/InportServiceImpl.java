@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -51,8 +52,16 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         return super.updateById(entity);
     }
 
-
-
-
+    @Override
+    public boolean removeById(Serializable id) {
+        //根据进货ID查询进货
+        Inport inport = baseMapper.selectById(id);
+        //根据商品ID查询商品信息
+        Goods goods = goodsMapper.selectById(inport.getGoodsid());
+        //库存的算法  当前库存-进货单数量
+        goods.setNumber(goods.getNumber()-inport.getNumber());
+        goodsMapper.updateById(goods);
+        return super.removeById(id);
+    }
 
 }
