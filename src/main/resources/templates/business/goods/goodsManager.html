@@ -233,7 +233,8 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 		    ,height:'full-280'
 		    ,page: true
 		    ,cols: [ [
-		      {field:'id', title:'ID',align:'center' ,width:'80'}
+			   {type:'checkbox',align:'center'}
+		      ,{field:'id', title:'ID',align:'center' ,width:'80'}
 		      ,{field:'goodsname', title:'商品名称',align:'center',width:'150'}
 			  ,{field:'goodsTypeName', title:'商品分类',align:'center',width:'120'}
 		      ,{field:'providerName', title:'供应商',align:'center',width:'120'}
@@ -467,7 +468,6 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 			layer.close(index);
 		});
 	}
-
 
 
 

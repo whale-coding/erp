@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -157,8 +158,6 @@ public class GoodsController {
             return SystemConstant.DELETE_ERROR;
         }
     }
-
-
 
 
 
