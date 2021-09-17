@@ -61,5 +61,14 @@ public class BusinessController {
     }
 
 
+    /**
+     * 去到供应商管理页面
+     * @return
+     */
+    @RequestMapping("/toProviderManager")
+    public String toProviderManager(){
+        return "business/provider/providerManager";
+    }
+
 
 }
