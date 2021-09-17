@@ -159,6 +159,22 @@ public class GoodsController {
         }
     }
 
+    /**
+     * 加载所有可用的商品
+     */
+    @RequestMapping("/loadAllGoodsForSelect")
+    public DataGridViewResult loadAllGoodsForSelect() {
+        QueryWrapper<Goods> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("available", 1);
+        List<Goods> list = goodsService.list(queryWrapper);
+        for (Goods goods : list) {
+            Provider provider = providerService.getById(goods.getProviderid());
+            if(null!=provider) {
+                goods.setProviderName(provider.getProvidername());
+            }
+        }
+        return new DataGridViewResult(list);
+    }
 
 
 }

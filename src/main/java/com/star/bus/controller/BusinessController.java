@@ -79,5 +79,23 @@ public class BusinessController {
         return "business/goods/goodsManager";
     }
 
+    /**
+     * 去到商品进货页面
+     * @return
+     */
+    @RequestMapping("/toInportManager")
+    public String toInportManager(){
+        return "business/inport/inportManager";
+    }
+
+    /**
+     * 去到商品退货查询页面
+     * @return
+     */
+    @RequestMapping("/toOutportManager")
+    public String toOutportManager(){
+        return "business/goods/goodsManager";
+    }
+
 
 }
