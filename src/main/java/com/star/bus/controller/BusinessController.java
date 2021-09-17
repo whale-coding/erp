@@ -94,7 +94,7 @@ public class BusinessController {
      */
     @RequestMapping("/toOutportManager")
     public String toOutportManager(){
-        return "business/goods/goodsManager";
+        return "business/outport/outportManager";
     }
 
 
