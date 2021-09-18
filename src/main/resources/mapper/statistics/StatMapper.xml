@@ -6,5 +6,9 @@
         select address as name,count(*) as value from bus_customer
         GROUP BY address
     </select>
+    <select id="queryOperatePersonYearGradeStat" resultType="com.star.stat.domain.BaseEntity">
+        select operateperson as name,sum(number) as value from bus_inport
+        where DATE_FORMAT(inporttime,"%Y")=#{value} GROUP BY operateperson
+    </select>
 
 </mapper>

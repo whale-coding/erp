@@ -13,6 +13,11 @@ public interface StatMapper {
 	 */
 	List<BaseEntity> queryCustomerAreaStat();
 
-
+	/**
+	 * 查询进货员员年度业绩
+	 * @param year
+	 * @return
+	 */
+	List<BaseEntity> queryOperatePersonYearGradeStat(String year);
 
 }

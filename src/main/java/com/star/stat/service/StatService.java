@@ -15,4 +15,11 @@ public interface StatService {
      * @return
      */
     List<BaseEntity> loadCustomerAreaStatList();
+
+    /**
+     * 查询进货员员年度业绩
+     * @param year
+     * @return
+     */
+    List<BaseEntity> queryOperatePersonYearGradeStatList(String year);
 }

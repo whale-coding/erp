@@ -18,4 +18,9 @@ public class StatServiceImpl implements StatService {
     public List<BaseEntity> loadCustomerAreaStatList() {
         return statMapper.queryCustomerAreaStat();
     }
+
+    @Override
+    public List<BaseEntity> queryOperatePersonYearGradeStatList(String year) {
+        return statMapper.queryOperatePersonYearGradeStat(year);
+    }
 }
