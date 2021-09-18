@@ -11,4 +11,53 @@
         where DATE_FORMAT(inporttime,"%Y")=#{value} GROUP BY operateperson
     </select>
 
+    <select id="queryCompanyYearGradeStat" resultType="java.lang.Integer">
+        select sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'01')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'02')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'03')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'04')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'05')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'06')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'07')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'08')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'09')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'10')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'11')
+        UNION all
+        select
+            sum(number) from bus_inport where
+            DATE_FORMAT(inporttime,"%Y%m")=concat(#{value},'12')
+    </select>
+
 </mapper>

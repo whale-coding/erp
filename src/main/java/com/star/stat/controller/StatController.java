@@ -69,4 +69,28 @@ public class StatController {
     }
 
 
+    /**
+     * 跳转到公司年度统计页面
+     */
+    @RequestMapping("/toCompanyYearGradeStat")
+    public String toCompanyYearGradeStat() {
+        return "statistics/companyYearGradeStat";
+    }
+
+    /**
+     * 加载公司年度统计数据
+     */
+    @RequestMapping("/loadCompanyYearGradeStat")
+    @ResponseBody
+    public List<Integer> loadCompanyYearGradeStat(String year){
+        List<Integer> entities=statService.loadCompanyYearGradeStatList(year);
+        for (int i = 0; i < entities.size(); i++) {
+            if(null==entities.get(i)) {
+                entities.set(i, 0);
+            }
+        }
+        return entities;
+    }
+
+
 }

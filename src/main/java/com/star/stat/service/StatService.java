@@ -22,4 +22,13 @@ public interface StatService {
      * @return
      */
     List<BaseEntity> queryOperatePersonYearGradeStatList(String year);
+
+
+    /**
+     * 加载公司年度进货量统计数据
+     * @param year
+     * @return
+     */
+    List<Integer> loadCompanyYearGradeStatList(String year);
+
 }

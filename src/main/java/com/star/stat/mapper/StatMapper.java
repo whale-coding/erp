@@ -20,4 +20,11 @@ public interface StatMapper {
 	 */
 	List<BaseEntity> queryOperatePersonYearGradeStat(String year);
 
+	/**
+	 * 加载公司年度进货量统计数据
+	 * @param year
+	 * @return
+	 */
+	List<Integer> queryCompanyYearGradeStat(String year);
+
 }
