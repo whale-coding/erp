@@ -1,6 +1,8 @@
 package com.star.sys.controller;
 
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.LineCaptcha;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -15,6 +17,8 @@ import com.star.sys.vo.LoginUserVo;
 import com.star.sys.vo.UserVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
@@ -23,8 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -51,41 +59,65 @@ public class UserController {
     /**
      * 登录
      * @param loginname     用户名
-     * @param pwd           密码
+     * @param loginpwd      密码
      * @param session
      * @return
      */
     @PostMapping("/login")
-    public JSONResult login(String loginname, String loginpwd, HttpSession session, HttpServletRequest request){
+    public JSONResult login(String loginname, String loginpwd,String code, HttpSession session, HttpServletRequest request){
 
-            //获取当前登录主体对象
-            Subject subject = SecurityUtils.getSubject();
-            //创建令牌对象
-            UsernamePasswordToken token = new UsernamePasswordToken(loginname,loginpwd);
-            try {
-            //登录
-            subject.login(token);
-            //获取当前登录对象
-            LoginUserVo userVo =(LoginUserVo) subject.getPrincipal();
-            //保存session
-            session.setAttribute(SystemConstant.LOGINUSER,userVo.getUser());
+                Object code1 = session.getAttribute("code");  //获取生成的验证码
 
-            //记录日志
-             //内容、操作类型,登录人，登录人id，登录人ip，操作时间
-             Log log=new Log("用户登录",SystemConstant.LOGIN_ACTION
-                     ,loginname+"-"+userVo.getUser().getName()
-                     ,userVo.getUser().getId()
-                     ,request.getRemoteAddr(),new Date());
-             logService.save(log);
+                //获取当前登录主体对象
+                Subject subject = SecurityUtils.getSubject();
+                //创建令牌对象
+                UsernamePasswordToken token = new UsernamePasswordToken(loginname,loginpwd);
+                try {
+                    //登录
+                    subject.login(token);
+                    //获取当前登录对象
+                    LoginUserVo userVo =(LoginUserVo) subject.getPrincipal();
+                    //保存session
+                    session.setAttribute(SystemConstant.LOGINUSER,userVo.getUser());
 
-            //登录成功
-            return SystemConstant.LOGIN_SUCCESS;
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            //登录失败，用户名或密码错误
-            return SystemConstant.LOGIN_ERROR_PASS;
-        }
+                    //记录日志
+                    //内容、操作类型,登录人，登录人id，登录人ip，操作时间
+                    Log log=new Log("用户登录",SystemConstant.LOGIN_ACTION
+                            ,loginname+"-"+userVo.getUser().getName()
+                            ,userVo.getUser().getId()
+                            ,request.getRemoteAddr(),new Date());
+                    logService.save(log);
 
+                    if (code1.equals(code)){
+                        //登录成功
+                        return SystemConstant.LOGIN_SUCCESS;
+                    }else {
+                        return SystemConstant.LOGIN_ERROR_CODE;
+                    }
+
+                } catch (UnknownAccountException e) {
+                    e.printStackTrace();
+                    //登录失败，用户名错误
+                    return SystemConstant.LOGIN_ERROR_UserName;
+                }catch (IncorrectCredentialsException e) {
+                    e.printStackTrace();
+                    //登录失败，密码错误
+                    return SystemConstant.LOGIN_ERROR_Password;
+                }
+
+    }
+
+    /**
+     * 得到登陆验证码
+     * @throws IOException
+     */
+    @RequestMapping("/getCode")
+    public void getCode(HttpServletResponse response, HttpSession session) throws IOException {
+        // 定义图形验证码的长和宽
+        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(116, 36,4,5);
+        session.setAttribute("code", lineCaptcha.getCode());
+        ServletOutputStream outputStream = response.getOutputStream();
+        ImageIO.write(lineCaptcha.getImage(), "JPEG", outputStream);
     }
 
 

@@ -21,6 +21,20 @@ public interface SystemConstant {
      * 登录失败，用户名或密码错误
      */
     JSONResult LOGIN_ERROR_PASS = new JSONResult(false,"登录失败,用户名或密码错误!");
+    /***
+     * 登录失败，用户名错误
+     */
+    JSONResult LOGIN_ERROR_UserName = new JSONResult(false,"登录失败,用户名错误!");
+
+    /***
+     * 登录失败，用户名错误
+     */
+    JSONResult LOGIN_ERROR_Password = new JSONResult(false,"登录失败,密码错误!");
+    /**
+     * 登录失败，验证码错误
+     */
+    JSONResult LOGIN_ERROR_CODE = new JSONResult(false,"登录失败,验证码错误!");
+
 
 
 // =========================================跟菜单树节点有关的常量=============================================
