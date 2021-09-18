@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.stat.mapper.StatMapper">
+
+    <select id="queryCustomerAreaStat" resultType="com.star.stat.domain.BaseEntity">
+        select address as name,count(*) as value from bus_customer
+        GROUP BY address
+    </select>
+
+</mapper>
