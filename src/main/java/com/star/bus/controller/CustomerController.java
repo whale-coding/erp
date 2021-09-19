@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -113,7 +114,6 @@ public class CustomerController {
             return SystemConstant.DELETE_ERROR;
         }
     }
-
 
 
 }
