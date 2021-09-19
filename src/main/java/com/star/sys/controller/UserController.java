@@ -3,10 +3,14 @@ package com.star.sys.controller;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.star.bus.pojo.Goods;
+import com.star.bus.service.GoodsService;
 import com.star.sys.pojo.Log;
 import com.star.sys.pojo.User;
 import com.star.sys.service.LogService;
@@ -32,7 +36,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -55,6 +61,9 @@ public class UserController {
 
     @Resource
     private RoleService roleService;
+
+    @Resource
+    private GoodsService goodsService;
 
     /**
      * 登录
@@ -308,7 +317,16 @@ public class UserController {
         return SystemConstant.DISTRIBUTE_ERROR;
 
     }
-
-
+    /**
+     * 生成二维码
+     */
+    @RequestMapping("/getQRCode")
+    public void getCode2(HttpServletResponse response,int id) throws IOException {
+        Goods goods = goodsService.getById(id);
+        String content="商品名称:"+goods.getGoodsname()+"\n"+"商品产地："+goods.getProduceplace()+"\n"+"商品规格:"+goods.getGoodspackage()+"\n"+"商品描述:"+goods.getDescription();
+        BufferedImage image = QrCodeUtil.generate(content, 300, 300);
+        ServletOutputStream outputStream = response.getOutputStream();
+        ImageIO.write(image, "JPEG", outputStream);
+    }
 }
 
