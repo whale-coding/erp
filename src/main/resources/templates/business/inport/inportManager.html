@@ -85,6 +85,7 @@
 		<button type="button" lay-event="update" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-edit"></span>更新</button>
 		<button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
 		<button type="button" lay-event="back" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-edit"></span>退货</button>
+		<button type="button" lay-event="export" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-download-circle"></span>导出进货单</button>
 	</div>
 </div>
 <!-- 数据表格结束 -->
@@ -217,7 +218,7 @@ layui.use(['jquery','form','table','layer','laydate'],function(){
 		      ,{field:'inportprice', title:'进货价格',align:'center',width:'100'}
 		      ,{field:'remark', title:'备注',align:'center',width:'120'}
 		      ,{field:'operateperson', title:'操作员',align:'center',width:'100'}
-		      ,{fixed: 'right', title:'操作', toolbar: '#inportRowBar',align:'center',width:'300'}
+		      ,{fixed: 'right', title:'操作', toolbar: '#inportRowBar',align:'center',width:'400'}
 		    ] ]
 		      ,done: function(res, curr, count){ //处理删除某一页最后一条数据的BUG
 			        if(res.data.length==0&&curr!=1){
@@ -286,6 +287,9 @@ layui.use(['jquery','form','table','layer','laydate'],function(){
 				break;
 			case 'back':
 				back(data);
+				break;
+			case 'export':
+				exportInport(data);
 				break;
 		};
 	});
@@ -446,6 +450,12 @@ layui.use(['jquery','form','table','layer','laydate'],function(){
 		return false;
 	});
 
+	/**
+	 * 导出进货单
+	 */
+	function exportInport(data) {
+		window.location.href="/export/exportInport?id="+data.id;
+	}
 
 
 	});
