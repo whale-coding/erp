@@ -81,6 +81,7 @@ public class ShiroConfiguration {
         filterChainDefinitionsMap.put("/resources/**","anon");//静态资源
         filterChainDefinitionsMap.put("/sys/user/login","anon");//登录请求
         filterChainDefinitionsMap.put("/sys/login","anon");//去到登录页面
+        filterChainDefinitionsMap.put("/sys/user/getCode","anon");//获取登录验证码
         filterChainDefinitionsMap.put("/","anon");//去到登录页面
         filterChainDefinitionsMap.put("/login.html","anon");//去到登录页面
         filterChainDefinitionsMap.put("/favicon.ico","anon");//小图标

@@ -88,7 +88,7 @@ public class UserController {
                             ,request.getRemoteAddr(),new Date());
                     logService.save(log);
 
-                    if (code1.equals(code)){
+                    if (code.equals(code1)){
                         //登录成功
                         return SystemConstant.LOGIN_SUCCESS;
                     }else {
