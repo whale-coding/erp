@@ -185,4 +185,9 @@ public interface SystemConstant {
      */
     JSONResult  OPERATE_ERROR=new JSONResult(false, "操作失败");
 
+    /**
+     * 临时文件标记
+     */
+    String FILE_UPLOAD_TEMP = "_temp";
+
 }
