@@ -97,5 +97,22 @@ public class BusinessController {
         return "business/outport/outportManager";
     }
 
+    /**
+     * 去到商品销售页面
+     * @return
+     */
+    @RequestMapping("/toSaleManager")
+    public String toSaleManager(){
+        return "business/sale/SaleManager";
+    }
+
+    /**
+     * 去到商品销售退货查询页面
+     * @return
+     */
+    @RequestMapping("/toSaleReturnManager")
+    public String toSaleReturnManager(){
+        return "business/sale/saleReturnManager";
+    }
 
 }
