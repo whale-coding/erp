@@ -95,6 +95,7 @@
 		<button type="button" lay-event="update" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-edit"></span>更新</button>
 		<button type="button" lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
 		<button type="button" lay-event="Qrcode" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-link"></span>商品信息二维码</button>
+		<button type="button" lay-event="viewImg" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-picture"></span>查看大图</button>
 	</div>
 </div>
 <!-- 数据表格结束 -->
@@ -216,12 +217,20 @@
 <!--二维码展示弹出层-->
 <div style="display: none;padding: 5px" id="CodeDiv">
 	<div style="text-align: center">
-		<img src="" alt="商品二维码" id="QrcodeImg" class="" style="background-position: center,center">
+		<img src="" alt="商品二维码" id="QrcodeImg">
 	</div>
 	<div style="text-align: center">
 		<button type="button" class="layui-btn" lay-submit lay-filter="doClose" id="doClose" ><span class="layui-icon layui-icon-close"></span>关闭</button>
 	</div>
 </div>
+
+<!--查看商品大图开始-->
+<div style="display: none;padding: 5px" id="viewGoodsImgDiv">
+	<div style="text-align: center">
+		<img src="" alt="商品大图" id="viewGoodsImg">
+	</div>
+</div>
+<!--查看商品大图结束-->
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
@@ -261,7 +270,7 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 			 ,{field:'available', title:'是否可用',align:'center',width:'100',templet:function(d){
 					 return d.available==1?'<font color=blue>可用</font>':'<font color=red>不可用</font>';
 			 	}}
-		      ,{fixed: 'right', title:'操作', toolbar: '#goodsRowBar',align:'center',width:'400'}
+		      ,{fixed: 'right', title:'操作', toolbar: '#goodsRowBar',align:'center',width:'450'}
 		    ] ]
 		      ,done: function(res, curr, count){ //处理删除某一页最后一条数据的BUG
 			        if(res.data.length==0&&curr!=1){
@@ -331,8 +340,11 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 			    case 'delete':  //删除
 			   		deleteGoods(data);
 			    break;
-				 case 'Qrcode':  //删除
+				 case 'Qrcode':  //商品二维码
 					 openQrcodeLayer(data);
+					 break;
+				 case 'viewImg':  //查看大图
+					 showGoodsImg(data);
 					 break;
 			  };
 
@@ -507,6 +519,22 @@ layui.use(['jquery','form','table','layer','upload'],function(){
 
 		return false;
 	});
+
+	/**
+	 * 查看商品大图
+	 */
+	function showGoodsImg(data) {
+		mainIndex=layer.open({
+			type:1,
+			content:$("#viewGoodsImgDiv"),
+			area:['600px','500px'],
+			title:"【"+data.goodsname+'】的商品大图',
+			success:function(){
+				url="/file/showImageByPath?path="+data.goodsimg;
+				$("#viewGoodsImg").attr("src",url);
+			}
+		});
+	}
 
 	});
 </script>
