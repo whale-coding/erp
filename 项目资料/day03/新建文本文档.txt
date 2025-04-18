@@ -1,0 +1,9 @@
+cols: [ [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'ID',align:'center'}
+                ,{field:'loginname', title:'登陆名称',align:'center'}
+                ,{field:'type', title:'日志类型',align:'center'}
+                ,{field:'content', title:'日志内容',align:'center'}
+                ,{field:'loginip', title:'登陆地址',align:'center'}
+                ,{field:'createtime', title:'登陆时间',align:'center'}
+            ] ]
